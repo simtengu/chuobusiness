@@ -1,0 +1,150 @@
+
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+       
+      #nwProductFmrow {
+        display: block !important;
+      }
+
+      #premium_heading, #premium_heading2 {
+        font-size: 16px;
+      }
+    }
+
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+       
+     #nwProductFmrow {
+        display: flex !important;
+      }
+    }
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+       
+    } 
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+       
+    } 
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+      
+
+
+    }
+
+    *{
+      box-sizing: border-box;
+
+    }
+
+
+      .height{
+        min-height: 100vh;
+      }
+      .height-70{
+        min-height: 70vh;
+      }
+      
+      .height-80{
+        height: 80vh;
+      }
+      .height-50{
+        height: 50vh;
+      }
+
+     .height-60{
+        height: 60vh;
+      }
+
+      .height-40{
+        height: 40vh;
+      }
+
+
+ #userProfile-top-div {
+
+ /* min-height:  35vh;*/
+  background-color: #8cc2ff;
+ }
+
+
+#profile-main-div #product-div {
+  border-radius: 5px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+  margin-bottom: 2px;
+}
+
+#product-div img{
+  height: 55px; width: auto;
+}
+
+#profile-main-div{
+  /*background-color: #e5e5e5; height: 300px; width: 200px;*/
+  width: 100%;
+  height: auto;
+}
+
+#cyan-color-span {
+  color: #5ba9ff;
+}
+
+#pTime {
+  max-width: 20%;margin-right: 4px;
+  border: 1px solid #e1e1e1;border-radius: 3px;
+}
+
+.input-border {
+  border: 1px solid #e1e1e1;
+}
+
+ #document-loader-div {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  min-width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 1000;
+  display: none;
+  
+}
+
+#document-loader-div #loader-img{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-times {
+  font-family: times new roman;
+}
+
+.text-arial {
+  font-family: arial narrow;
+}
+
+.text-17 {
+  font-size: 17px;
+}
+
+
+.text-16 {
+  font-size: 16px;
+}
+
+.text-18 {
+  font-size: 18px;
+}
+
+
+
+   
+  
+  

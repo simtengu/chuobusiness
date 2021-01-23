@@ -3,20 +3,17 @@
  @include('includes.categories_section')
 @endsection
 @section('content')
+<div class="row">
 <!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
 		<!-- <div style="margin-bottom: 6px;"><button class="btn btn-block btn-warning padding-3">Make your product Premium</button></div> -->
+		@if(count($categories))
 		<ul id="sideManu" class="nav nav-tabs nav-stacked">
-			<li class="subMenu open"><a> ELECTRONICS [230]</a>
-			</li>
-			<li class="subMenu"><a> CLOTHES [840] </a>
-			</li>
-			<li class="subMenu"><a>FOOD AND BEVERAGES [1000]</a>
-			</li>
-			<li><a href="products.html">HEALTH & BEAUTY [18]</a></li>
-			<li><a href="products.html">SPORTS & LEISURE [58]</a></li>
-			<li><a href="products.html">BOOKS & ENTERTAINMENTS [14]</a></li>
+			@foreach($categories as $category)
+			<li><a href="{{ url('/category_products') }}/{{ $category->id }}/1">{{ $category->name }}</a></li>
+			@endforeach
 		</ul>
+		@endif
 		<br/>
 		  <div class="thumbnail">
 			<img src="themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera"/>
@@ -41,6 +38,7 @@
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">		
+	@if(count($chuoproducts) > 0)
 			<div class="well well-small">
 				<div class="well-head">
 					<div>
@@ -55,124 +53,35 @@
 <!-- laptops and smartphones carousel.......................................................... -->
 
        <div class="laptops-carousel">
+       	  @foreach($chuoproducts as $product)
+            @if(count($product->image))
 			<div class="carousel-cell">
 					  <div class="thumbnail">
 					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/mypc.jpg ') }}" alt=""/>
+						<a href="{{ route('item_preview',[2,$product->id]) }}"><img src="{{ asset('pictures') }}/{{ $product->image[0]->name }}" >
 						</a>
 					    </div>
+					   <a id="chuoproductLink" href="{{ route('item_preview',[2,$product->id]) }}">
 						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
+						  <h5 class="text-times padding-0 margin-0">{{ Str::limit($product->product_name,20) }} @if($product->period_id != null) <span class="text-orange text-16">(used)</span> @endif</h5>
 						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
+							{{  Str::limit($product->product_description,50) }}
 						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
+						  <div style="text-align:center; display: inline-flex;">
+						  <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+						  <button class="btn"> <span class="text-orange">Tsh</span></button>
+						  </div>
 						</div>
+						</a>
 					  </div>
 			</div>
+			@endif
+		  @endforeach
 
-			<div class="carousel-cell">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/aa.jfif') }}" alt=""/>
-						</a>
-					    </div>
-						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
-						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div class="carousel-cell">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/cc.jpg') }}" alt=""/>
-						</a>
-					    </div>
-						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
-						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div class="carousel-cell">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/dd.jpg') }}" alt=""/>
-						</a>
-					    </div>
-						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
-						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div class="carousel-cell">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/shoe.jpg') }}" alt=""/>
-						</a>
-					    </div>
-						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
-						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div class="carousel-cell">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="{{ asset('themes/images/products/logo.jpg') }}" alt=""/>
-						</a>
-					    </div>
-						<div class="caption">
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <p class="padding-0 margin-0"> 
-							Lorem Ipsum is simply dummy text for holding empty. 
-						  </p>
-						  <h5 class="padding-0 margin-0">Manicure &amp; Pedicure</h5>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
        </div>
-
-
-
-
-<!-- end of laptops and smartphones carousel................................ -->
-
-
-
-
 		</div>
+	@endif
+<!-- end of laptops and smartphones carousel................................ -->
 		<h4> <a class="text-orange" href="premium_products.html">Premium Products</a> </h4>
 <!-- row.................................................................................. -->
        <div class="main-carousel">
@@ -285,164 +194,52 @@
 			</div>
        </div>
 <!-- end of premium section .................................................... -->
-
-
       <br>
-    <div >
-	<h4 class="text-orange"> Latest products</h4>
-	<form class="form-horizontal span6">
-        <label>Sort By </label>
-		<div id="sortby-div" class="d-flex">
-			<div class="control-group">
-				<select>
-	              <option>Priduct name A - Z</option>
-	              <option>Priduct name Z - A</option>
-	              <option>Priduct Stoke</option>
-	              <option>Price Lowest first</option>
-	            </select>
-			</div>
-			<div class="control-group">
-				<div style="display: inline-flex;">
-					<select>
-		              <option>Priduct name A - Z</option>
-		              <option>Priduct name Z - A</option>
-		              <option>Priduct Stoke</option>
-		              <option>Price Lowest first</option>
-		            </select>
-		            <button class="btn btn-primary">ok</button>	
-				</div>
-			</div>	
-		</div>
-	  </form>
+	<div id="products_filtering" style="padding: 2px 5px;" class="row">
+	      <a href="{{ route('products.order_type',1) }}" class="btn btn-outline-secondary">all</a>	
+	      <a href="{{ route('products.order_type',2) }}" class="btn btn-outline-secondary">cheap first</a>	
+	      <a href="{{ route('products.order_type',3) }}" class="btn btn-outline-secondary">expensive first</a>
+	      <a href="{{ route('products.order_type',4) }}" class="btn btn-outline-secondary">used only</a>	
+	      <a href="{{ route('products.order_type',5) }}" class="btn btn-outline-secondary">new only</a>	
 	</div>
-		<br class="clr"/>
-		<div id="latest-products-row" class="row" style="display: flex;flex-wrap: wrap !important;justify-content: space-around;">
+		<div id="latest-products-row" class="row" style="display: flex;flex-wrap: wrap !important;justify-content: start;">
+			
+	  @if(count($products))
+           @foreach($products as $product)
+            @if(count($product->photo))
 			<div id="col">
 					  <div class="thumbnail">
 					  	<div class="thumbnail-header">
-					  		<a href="product_details.html"><img src="themes/images/products/shcar3.jpg" alt="img"/></a>
+					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
 					  	</div>
+					  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
 						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
+						  <h5 class="text-times">{{ Str::limit($product->product_name,36) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
 						  <p> 
-							Lorem Ipsum is simply dummy text. 
+							{{  Str::limit($product->product_description,60) }}
 						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a><a class="btn btn-primary" href="#">&euro;110.00</a></h4>
+						  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+						  <div style="text-align:center; display: inline-flex;">
+						  <button class="btn btn-primary">
+						  	{{ number_format($product->product_price) }}</button>
+						  <button class="btn"> <span class="text-orange">Tsh</span></button>
+						  </div>
 						</div>
+					    </a>
 					  </div>
+					 
 			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/mypc.jpg" alt=""/></a>
-					    </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>
-						  	<a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/logo.jpg" alt=""/></a>
-					   </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> 
-						  <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/shoe.jpg" alt=""/></a>
-					   </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> 
-						  <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/cc.jpg" alt=""/></a>
-					   </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> 
-						  <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/mypc.jpg" alt=""/></a>
-					  </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>  <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/aa.jpg" alt=""/></a>
-					  </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
-
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-						<a href="product_details.html"><img src="themes/images/products/shcar3.jpg" alt=""/></a>
-				       </div>
-						<div class="caption">
-						  <h5>Manicure &amp; Pedicure</h5>
-						  <p> 
-							Lorem Ipsum is simply dummy text. 
-						  </p>
-						  <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a>  <a class="btn btn-primary" href="#">&euro;110.00</a></h4>
-						</div>
-					  </div>
-			</div>
+			@endif
+		  @endforeach
+		 @else
+		  <center><h4 class="text-info">NO PRODUCTS YET</h4></center>
+	@endif
 
 		</div>
 
-
+	         <div class=" mt-2">
+	           {{ $products->render()}}
+	         </div> 
 		</div>
+	</div>
 @endsection

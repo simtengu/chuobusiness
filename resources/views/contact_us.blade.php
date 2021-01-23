@@ -1,5 +1,6 @@
 @extends('layouts.homepage')
 @section('content')
+    <div class="row">
 		<div class="span4">
 	     <div class="padding-3">
 			<h4>Contact Details</h4>
@@ -92,4 +93,5 @@
 			      </form>	
 				</div>
 		</div>
+	 </div>
 @stop

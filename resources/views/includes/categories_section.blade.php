@@ -12,20 +12,13 @@
       			<button class="sidebar-close-btn ">x</button>
       		</div>
       	</div>
+      	@if(count($categories))
       	 <ul id="sideManuu" class="nav nav-tabs nav-stacked">
-			<li><a href="products.html">health and beauty[37]</a></li>
-			<li><a href="products.html">video games</a></li>
-			<li><a href="products.html">health and beauty[37]</a></li>
-			<li><a href="products.html">sports ans leisure[37]</a></li>
-			<li><a href="products.html">electronics[37]</a></li>
-			<li><a href="products.html">home equipments</a></li>
-			<li><a href="products.html">health and beauty[37]</a></li>
-			<li><a href="products.html">Vehicles[37]</a></li>
-			<li><a href="products.html">health and beauty[37]</a></li>
-			<li><a href="products.html">laptops & smartphones[37]</a></li>
-			<li><a href="products.html">health and beauty[37]</a></li>
-			
+			@foreach($categories as $category)
+			<li><a href="{{ url('/category_products') }}/{{ $category->id }}/1">{{ $category->name }}</a></li>
+			@endforeach
 		</ul>
+		@endif
       </div>
 	</div>
 <!-- end of all categories modal section.................................. -->
@@ -33,10 +26,11 @@
 	<div id="all-categories-btn-container">
 		<div style="height: 30px;" class="form">
 			
-			<form style=" background-color: #ffffff;padding: 3px; border-radius: 4px;">
+			<form method="get" action="" style=" background-color: #ffffff;padding: 3px; border-radius: 4px;">
+				@csrf
 				<div>
-					<input id="search-field" style="border: none;border-radius: none;margin: 0px 
-					!important;" type="text" name="product_name" placeholder="search a product here">	
+					<input class="a-search-field" id="search-field" style="border: none;border-radius: none;margin: 0px 
+					!important;" type="text" name="product_name" required placeholder="search a product here">	
 					<button type="submit" style="font-size: 20px;background-color: #ffffff;border: none; " ><i style="margin: 4px 0px;" class="icon-search"></i></button>
 				</div>
 			</form>
@@ -63,9 +57,9 @@
 	      	<div id="uvSearchByName" class="">
 	      		<div class="p-3">
 	      		 <div class="searchByNameFormDiv">
-					<form>
+					<form method="get" action="" id="university-search-form">
 						<div class="d-flex">
-							<input id="search-field" style="border: none;border-radius: none;margin: 0px;" type="text" name="product_name" placeholder="Enter university name">	
+							<input class="college-search-field" style="border: none;border-radius: none;margin: 0px;" type="text" name="product_name" placeholder="Enter university name" required>	
 							<button type="submit" style="font-size: 20px;background-color: #ffffff;border: none; " ><i style="margin: 4px 0px;" class="icon-search"></i></button>
 						</div>
 					</form>
@@ -76,16 +70,16 @@
 	      		<div class="p-3">
 	      		 <div><span style="color: #f89406;" >Find by region</span></div>
 	      		 <div>
-					<form action="region_products.html" class="form-inline navbar-search" >
+					<form id="regions_items_form" method="get" action="{{ route('region.products') }}" class="form-inline navbar-search" >
+				 			@csrf
 						<div style="display: inline-flex;">
-						  <select class="regions-select">
-				      		<option selected="selected">Select Region name</option>
-				      		<option>Arusha</option>
-				      		<option>Kilimanjaro</option>
-				      		<option>Tanga</option>
-				      		<option>Dar es salaam</option>
-				      		<option>Morogoro</option>
-				      		<option>Mbeya</option>
+						  	<select id="regions_items" class="regions-select" name="region_id">
+				      		<option value="">Select Region name</option>
+					 		@if(count($regions))
+					 		   @foreach($regions as $region)
+					 		    <option value="{{ $region->id }}">{{ $region->name }} ({{ $region->products_count }})</option>
+					 		   @endforeach
+					 		 @endif
 						 </select> 
 						  <button type="submit" id="" class="btn"><i class="icon-search" style="font-size: 18px"></i></button>
 			            </div>

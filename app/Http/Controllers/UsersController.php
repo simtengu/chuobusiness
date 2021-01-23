@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\Signup;
 use App\Region;
+use App\Product;
 use App\User;
 use App\Role;
 use App\University;
@@ -16,9 +18,25 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+   public function userCategories(){
+         $user_id = Auth::user()->id;
+          return Product::selectRaw('count(category_id) as total,category_id ')->where('user_id','=',$user_id)->groupBy('category_id')->orderBy('total','desc')->limit(6)->get();
+    }
+
     public function index()
     {
-        //
+      
+         $user_id = Auth::user()->id;
+         $products = Product::where('user_id','=',$user_id)->simplePaginate(6);
+         $categories = $this->userCategories();
+         $cat_count = $categories->count();
+         if(session()->has('product_deleted')){
+           session()->flash("product_deleted","Product successful deleted");
+         }elseif (session()->has('product_added')) {
+             session()->flash("product_added","One product has been successfully added");
+         }
+         return view('user_profile.index',compact('products','categories','cat_count'));  
     }
 
     /**
@@ -28,8 +46,11 @@ class UsersController extends Controller
      */
     public function create()
     {   
-        $regions = Region::orderBy('name','asc')->get();
-        return view('register',compact('regions'));
+          $productsClass = new ProductsController();
+          $universities = $productsClass->topUniversities();
+          $regions = $productsClass->regions();
+          $regions = Region::orderBy('name','asc')->get();
+        return view('register',compact('regions','universities','regions'));
     }
 
     /**
@@ -79,7 +100,11 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+         $categories = $this->userCategories();
+         $cat_count = $categories->count();
+        $regions = Region::orderBy('name','asc')->get();
+        return view("user_profile.edit",compact('user','cat_count','categories','regions'));
     }
 
     /**
@@ -91,7 +116,38 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $formUv_id = $request->input('university_id');
+        $user = User::findOrFail($id);
+      if ($formUv_id == null) {
+          $uv_id = $user->university_id;
+      }else{
+          $uv_id = $formUv_id;
+      }
+
+       $user->fname = $request->fname;
+       $user->lname = $request->lname;
+       $user->email = $request->email;
+       $user->whatsapp_phone = $request->whatsapp_phone;
+       $user->phone_2 = $request->phone_2;
+       $user->university_id = $uv_id;
+
+        $user->update();
+         session()->flash("user_updated","your data has been successfully updated");
+        return redirect()->route('user.edit',$id);
+    }
+
+    public function password_reset(Request $data, $id){
+         $hashed = Auth::user()->password;
+        if (Hash::check($data->current_pwd,$hashed)) {
+           $user = User::findOrFail($id);
+           $user->password = Hash::make( $data->password);
+           $user->update();
+            session()->flash("user_updated","your data has been successfully updated");
+            return redirect()->route('user.edit',$id);
+        }else{
+            session()->flash("password_reset_fail","You have typed wrong current password");
+            return redirect()->route('user.edit',$id);
+        }
     }
 
     /**
@@ -122,6 +178,13 @@ class UsersController extends Controller
     }else{ 
         return "wrong email or password";
     }
+ }
+
+
+ public function user_shop($id){
+    $user = User::findOrFail($id);
+    $products = Product::where('user_id','=',$id)->paginate(20);
+    return view('user_profile.user_shop_view',compact('products','user'));
  }
  
 }

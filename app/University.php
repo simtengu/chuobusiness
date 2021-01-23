@@ -16,4 +16,8 @@ class University extends Model
     public function user(){
     	return $this->hasMany('App\User');
     }
+
+    public function product(){
+    	return $this->hasMany('App\Product');
+    }
 }

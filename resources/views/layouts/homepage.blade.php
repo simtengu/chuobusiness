@@ -7,13 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 <!-- Bootstrap style --> 
-    <link id="callCss" rel="stylesheet" href="{{ asset('themes/bootshop/bootstrap.min.css') }}" media="screen"/>
-    <link href="{{ asset('themes/css/aos.css') }}" rel="stylesheet" media="screen"/>
+    <link id="callCss" rel="stylesheet" href="{{ asset('themes/bootshop/bootstrap.min.css') }}" media="screen"/> 
+    <link href="{{ asset('themes/css/base.css') }}" rel="stylesheet" media="screen"/>
     <link href="{{ asset('themes/css/flickity.css') }}" rel="stylesheet" media="screen"/>
 <!-- Bootstrap style responsive -->	
 	<link href="{{ asset('themes/css/bootstrap-responsive.min.css') }}" rel="stylesheet"/>
 	<link href="{{ asset('themes/css/font-awesome.css') }}" rel="stylesheet">
-
 <style type="text/css">
 
 .brown-color {
@@ -44,15 +43,112 @@
 	background-color: rgba(0,0,0,0.8);
 	z-index: 100;
 	display: none;
-	
 }
 
+::-webkit-scrollbar {
+	width: 0px;
+}
 
 	</style>
   </head>
 <body>
-<div id="header">
+<!-- hidden search engines container.................................................................. -->
+<div id="searchEnginesContainer">
+ <div style="display: flex;	
+	justify-content: center;flex-wrap: wrap; width: 100%;height: 100%;">
+	<div class="searchContainer">
+		<button  id="searchEngine_close_btn" style="background-color: inherit;border: none;" class="pull-right">X</button>
+			<div id="searchFormsDiv" style="margin-top: 40px;">
+<!-- nationlevel item search form............................................................ -->
+			<form style="display: none;" class="a-search-form" action="{{ route('itemSearch') }}  " method="get">
+				@csrf
+				<input type="hidden" id="a-search-path" name="a-search-path" value="{{ url('/item-search/nationLevel') }}">
+				<input type="hidden" name="level" value="nationLevel">
+				  <div style="position: relative;" class="control-group">
+		            <div id="a-controls" class="controls">
+		              <div class="input-append" >
+		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		              </div>
+		            </div>
+		             <div style="position: absolute; left: 0px;width: 100%;" id="a-search-suggestions">
+		             </div>
 
+		          </div>
+		         
+			</form>	
+<!-- user university search form........................................................... -->
+			<form style="display: none;" class="university-search-form" action="{{ route('itemSearch') }}" method="get">
+				@csrf
+				<input type="hidden" id="university-search-path" name="university-search-path" value="{{ url('/item-search/college') }}">
+				<input type="hidden" name="level" value="college">
+				  <div style="position: relative;" class="control-group">
+		            <div id="college-controls" class="controls">
+		              <div class="input-append" >
+		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search university/college here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		              </div>
+		            </div>
+		             <div style="position: absolute; left: 0px;width: 100%;" id="college-search-suggestions">
+		             </div>
+
+		          </div>
+		         
+			</form>	
+<!-- item search in region level........................................................... -->
+	@isset($region)
+			<form style="display: none;" class="b-search-form" action="{{ route('itemSearch') }}" method="get">
+				@csrf
+			
+				<input type="hidden" id="b-search-path" name="b-search-path" value="{{ url('/itemSearch/regionLevel') }}/{{ $region->id }}">
+				
+				<input type="hidden" name="level" value="regionLevel">
+				<input type="hidden" name="region_id" value="{{ $region->id }}">
+				  <div style="position: relative;" class="control-group">
+		            <div id="college-controls" class="controls">
+		              <div class="input-append" >
+		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		              </div>
+		            </div>
+		             <div style="position: absolute; left: 0px;width: 100%;" id="b-search-suggestions">
+		             </div>
+
+		          </div>
+		         
+			</form>	
+     @endisset
+
+<!-- item search in university level........................................................... -->
+	@isset($university)
+			<form style="display: none;" class="c-search-form" action="{{ route('itemSearch') }}" method="get">
+				@csrf
+			
+				<input type="hidden" id="c-search-path" name="c-search-path" value="{{ url('/itemSearch/universityLevel') }}/{{ $university->id }}">
+				
+				<input type="hidden" name="level" value="universityLevel">
+				<input type="hidden" name="university_id" value="{{ $university->id }}">
+				  <div style="position: relative;" class="control-group">
+		            <div id="college-controls" class="controls">
+		              <div class="input-append" >
+		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here" ><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		              </div>
+		            </div>
+		             <div style="position: absolute; left: 0px;width: 100%;" id="c-search-suggestions">
+		             </div>
+
+		          </div>
+		         
+			</form>	
+     @endisset
+
+			</div>
+	</div>
+
+
+  </div>
+</div>
+
+
+<!-- end of search engines  container................................................................. -->
+<div id="header">
 	              @if(Session()->has('registration_session'))
 						<div class="alert alert-block alert-success fade in">
 							<button type="button" class="close" data-dismiss="alert">×</button>
@@ -73,6 +169,7 @@
 	</div>
 </div>
 <!-- Navbar ================================================== -->
+
 <div  class="mynav ">
 	<div id="nav_flex_container">
 		  <div class="f-item1">
@@ -82,27 +179,25 @@
 		    </div>
 		    <div id="toggler1">
 				<a id="linksToggler1" href="#" >
-					<img src="themes/images/toggler4.png">
+					<img src="{{ asset('themes/images') }}/toggler4.png">
 				</a>
 		    </div>	
 		  </div>
 
 		    <div class="f-item2">
 		       	  <div>
-					<form style="margin: 0px !important;" class="form-inline" method="post" action="products.html" >
+					<form id="topUniversitiesForm" style="margin: 0px !important;" class="form-inline" method="get" action="{{ route('university.products') }}" >
+						@csrf
+						<input type="hidden" value="{{ url('/university_products') }}" name="university_products_path" id="university_path">
 						<div style="display: inline-flex;">
-						  <select class="srchTxt">
-							<option>Top Universities' Products</option>
-							<option>UDOM </option>
-							<option>UDSM</option>
-							<option>MUHAS</option>
-							<option>MUST</option>
-							<option>DIT</option>
-							<option>KCMC</option>
-							<option>ST JOHN</option>
-							<option>ST JOSEPH</option>
-							<option>ARDHI DAR ES SALAAM</option>
-							<option>BUGANDO</option>
+						  <select id="top_universities" name="top_universities" class="srchTxt">
+							<option value="">Top Universities' Products</option>
+						@if(count($universities))
+						  @foreach($universities as $university)
+							<option value="{{ $university->university_id }}">{{ $university->university->name }} ({{ $university->university_count }}) </option>
+						  @endforeach
+						@endif
+
 						 </select> 
 						  <button type="submit" id="submitButton" class="btn btn-primary"><i class="icon-search" style="font-size: 18px"></i></button>
 			            </div>
@@ -117,17 +212,16 @@
 				 		<div style="padding-bottom: 30px;">
 				 			<button id="regions_close_btn" class="pull-right" style="background-color: inherit;border: none; padding: 10px">X</button>
 				 		</div>
-				 		<form method="post" action="region_products.html">
-					 	<select>
-					 		<option selected="selected">Select Region</option>
-					 		<option>Arusha</option>
-					 		<option>Tabora</option>
-					 		<option>Mwanza</option>
-					 		<option>kilimanjaro</option>
-					 		<option>Pwani</option>
-					 		<option>Rukwa</option>
-					 		<option>Ruvuma</option>
-					 		<option>Tanga</option>
+				 		<form id="rProductsForm" method="get" action="{{ route('region.products') }}">
+				 			@csrf
+				 		<input type="hidden" value="{{ url('/region_products') }}" name="region_products_path" id="regions_path">
+					 	<select id="regions_products" name="region_id">
+					 		<option selected="selected" value="">Select Region</option>
+					 		@if(count($regions))
+					 		   @foreach($regions as $region)
+					 		    <option value="{{ $region->id }}">{{ $region->name }} ({{ $region->products_count }})</option>
+					 		   @endforeach
+					 		 @endif
 					 	</select>
 					 	<button class="btn btn-block btn-primary">Submit</button>
 					 	</form>	
@@ -143,7 +237,7 @@
 			           <div id="profile-container" class="d-none">
 			               <div id="logout-profile-div" class="d-flex flex-column bg-logo">
 			               	 <div style="border-bottom: 1px solid #a55316" id="flex-item">
-			               	 	<a href="#">My account</a>
+			               	 	<a href="{{ route('user.index') }}">My account</a>
 			               	 </div>
 			               	 <div id="flex-item">
 			                  <a href="{{ route('signout') }}"
@@ -206,11 +300,9 @@
 	End====================================================================== -->
 	@yield('all_categories')
 
-<div id="mainBody">
+<div id="mainBody" style="min-height: 45vh;">
 	<div class="container">
-	 <div class="row">
        @yield('content')
-	 </div>
 	</div>
 </div>
 <!-- window preloader div............................................ -->
