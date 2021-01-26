@@ -31,6 +31,11 @@ class ChuoproductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+        $this->middleware(['auth','normal_admin','preventBackHistory']);
+        // $this->middleware('preventBackHistory',['only'=>['index','store','show','edit','update']]);
+    }
+
     public function index()
     {
        $cat = new UsersController();
@@ -38,7 +43,7 @@ class ChuoproductsController extends Controller
        $cat_count = $categories->count();
        $user =  Auth::user();
        $user_id =$user->id;
-       if ($user->isAdmin()) {
+      
          $products = Chuoproduct::where('user_id',$user_id)->simplePaginate(6);
          if(session()->has('product_deleted')){
            session()->flash("product_deleted","Product successful deleted");
@@ -46,9 +51,7 @@ class ChuoproductsController extends Controller
              session()->flash("product_added","One product has been successfully added");
          }
          return view('products.chuoproductsIndex',compact('products','categories','cat_count'));
-       }else{
-        return "You are not allowed";
-       }
+
 
     }
 
@@ -175,12 +178,10 @@ class ChuoproductsController extends Controller
      */
     public function destroy($id)
     {   
-        if (Auth::user()->isAdmin()) {
+      
             Chuoproduct::findOrFail($id)->delete();
             session()->flash("product_deleted","Product successful deleted");
             return redirect()->route('chuoproduct.index');
-        }else{
-            return "you are not allowed";
-        }
+
     }
 }

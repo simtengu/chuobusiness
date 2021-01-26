@@ -18,17 +18,23 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function __construct(){
+        $this->middleware('auth',['except'=> ['create','store','login','user_shop']]);
+        $this->middleware('preventBackHistory',['only'=> ['index']]);
+        // $this->middleware('preventBackHistory',['only'=>['index','store','show','edit','update']]);
+    }
 
    public function userCategories(){
          $user_id = Auth::user()->id;
           return Product::selectRaw('count(category_id) as total,category_id ')->where('user_id','=',$user_id)->groupBy('category_id')->orderBy('total','desc')->limit(6)->get();
-    }
+    } 
 
     public function index()
     {
       
          $user_id = Auth::user()->id;
-         $products = Product::where('user_id','=',$user_id)->simplePaginate(6);
+         $products = Product::where('user_id',$user_id)->simplePaginate(10);
          $categories = $this->userCategories();
          $cat_count = $categories->count();
          if(session()->has('product_deleted')){
@@ -61,7 +67,6 @@ class UsersController extends Controller
      */
     public function store(Signup $data)
     {
-
 
         $jj = new User();
         $jj['fname'] = $data->get('fname');
@@ -100,11 +105,17 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        if (Auth::user()->id == $id) {
         $user = User::findOrFail($id);
          $categories = $this->userCategories();
          $cat_count = $categories->count();
         $regions = Region::orderBy('name','asc')->get();
         return view("user_profile.edit",compact('user','cat_count','categories','regions'));
+
+        }else{
+            return redirect()->back();
+        }
+
     }
 
     /**
@@ -116,6 +127,8 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::user()->id == $id) {
+
         $formUv_id = $request->input('university_id');
         $user = User::findOrFail($id);
       if ($formUv_id == null) {
@@ -134,9 +147,16 @@ class UsersController extends Controller
         $user->update();
          session()->flash("user_updated","your data has been successfully updated");
         return redirect()->route('user.edit',$id);
+
+        }else{
+            return redirect()->back();
+        }
+
+
     }
 
     public function password_reset(Request $data, $id){
+        if (Auth::user()->id == $id) {
          $hashed = Auth::user()->password;
         if (Hash::check($data->current_pwd,$hashed)) {
            $user = User::findOrFail($id);
@@ -148,6 +168,11 @@ class UsersController extends Controller
             session()->flash("password_reset_fail","You have typed wrong current password");
             return redirect()->route('user.edit',$id);
         }
+     
+        }else{
+            return redirect()->back();
+        }
+
     }
 
     /**

@@ -45,20 +45,45 @@
 	display: none;
 }
 
+/*#searchEnginesContainer{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	min-width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.8);
+	z-index: 120;
+	display: none;
+
+}
+
+#searchEnginesContainer .searchContainer {
+    padding: 4px 25px;
+    display: inline-block;
+    min-height: 80vh;
+    background-color: white;
+    border-radius: 4px;
+    margin-top: 5%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
 	width: 0px;
-}
+}*/
 
 	</style>
   </head>
 <body>
 <!-- hidden search engines container.................................................................. -->
 <div id="searchEnginesContainer">
- <div style="display: flex;	
+ <div style="	display: flex;	
 	justify-content: center;flex-wrap: wrap; width: 100%;height: 100%;">
 	<div class="searchContainer">
-		<button  id="searchEngine_close_btn" style="background-color: inherit;border: none;" class="pull-right">X</button>
-			<div id="searchFormsDiv" style="margin-top: 40px;">
+			<div id="searchFormsDiv" style="margin-top: 10px; display: flex; justify-content: space-between;">
+				<div> 
+					<button style="padding: 8px 15px;"  id="searchEngine_close_btn" class="btn btn-primary">X</button>
+				</div>
 <!-- nationlevel item search form............................................................ -->
 			<form style="display: none;" class="a-search-form" action="{{ route('itemSearch') }}  " method="get">
 				@csrf
@@ -67,7 +92,7 @@
 				  <div style="position: relative;" class="control-group">
 		            <div id="a-controls" class="controls">
 		              <div class="input-append" >
-		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		                <input name="key" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
 		              </div>
 		            </div>
 		             <div style="position: absolute; left: 0px;width: 100%;" id="a-search-suggestions">
@@ -84,7 +109,7 @@
 				  <div style="position: relative;" class="control-group">
 		            <div id="college-controls" class="controls">
 		              <div class="input-append" >
-		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search university/college here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		                <input name="key" type="text" placeholder="search university/college here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
 		              </div>
 		            </div>
 		             <div style="position: absolute; left: 0px;width: 100%;" id="college-search-suggestions">
@@ -105,7 +130,7 @@
 				  <div style="position: relative;" class="control-group">
 		            <div id="college-controls" class="controls">
 		              <div class="input-append" >
-		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		                <input name="key" type="text" placeholder="search item here"><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
 		              </div>
 		            </div>
 		             <div style="position: absolute; left: 0px;width: 100%;" id="b-search-suggestions">
@@ -128,7 +153,7 @@
 				  <div style="position: relative;" class="control-group">
 		            <div id="college-controls" class="controls">
 		              <div class="input-append" >
-		                <input name="key" style="width: 31vw;padding: 8px" type="text" placeholder="search item here" ><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
+		                <input name="key" type="text" placeholder="search item here" ><button style="padding: 8px 15px;" class="btn btn-primary" type="submit"><i style="font-size: 20px;" class="icon-search"></i></button>
 		              </div>
 		            </div>
 		             <div style="position: absolute; left: 0px;width: 100%;" id="c-search-suggestions">

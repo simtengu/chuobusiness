@@ -269,6 +269,8 @@ $(".a-search-field").focus(function(){
 	$(".a-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
   	$(".a-search-form input[type='text']").val("").focus();
+  	 $("#a-search-suggestions").html("");
+  	 
   }); 
 });
 // user university.college search.........................................
@@ -276,6 +278,7 @@ $(".college-search-field").focus(function(){
 	$(".university-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
   	$(".university-search-form input[type='text']").val("").focus();
+  	 $("#college-search-suggestions").html("");
   }); 
 });
 // region level item search.................................................
@@ -283,6 +286,7 @@ $(".b-search-field").focus(function(){
 	$(".b-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
   	$(".b-search-form input[type='text']").val("").focus();
+  	 $("#b-search-suggestions").html("");
   }); 
 });
 //university level item search.....................................
@@ -290,6 +294,7 @@ $(".c-search-field").focus(function(){
 	$(".c-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
   	$(".c-search-form input[type='text']").val("").focus();
+  	 $("#c-search-suggestions").html("");
   }); 
 });
 // search forms validation and normal submittion............................

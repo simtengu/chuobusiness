@@ -3,6 +3,34 @@ body {
   padding: 0px !important;
   margin: 0px !important;
 }
+
+#searchEnginesContainer{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  min-width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 120;
+  display: none;
+
+}
+
+#searchEnginesContainer .searchContainer input[name='key'] {
+          width: 20vw;  ;padding: 8px;
+}
+
+#searchEnginesContainer .searchContainer {
+    padding: 4px 25px;
+    min-height: 80vh;
+    width: 32vw;
+    background-color: white;
+    border-radius: 4px;
+    margin-top: 5%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
 #col .thumbnail:hover {
      box-shadow: 1px 1px 2px orange;
 }
@@ -369,28 +397,6 @@ box-shadow: 2px 2px 4px black;
         border: 1px solid #797979 !important;
        }
 /* end of navigation codes...............................................................*/
-#searchEnginesContainer{
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  min-width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.8);
-  z-index: 120;
-  display: none;
-
-}
-
-#searchEnginesContainer .searchContainer {
-    padding: 4px 25px;
-    display: inline-block;
-    min-height: 80vh;
-    background-color: white;
-    border-radius: 4px;
-    margin-top: 5%;
-    overflow-y: scroll;
-    scrollbar-width: none;
-}
 
 /*end of my main addition css.........................*/
 #mainBody { border-top:2px solid #dedede; padding: 18px 6px 5px;}
@@ -506,11 +512,17 @@ box-shadow: 2px 2px 4px black;
         padding-top: 10px;
        }
 
+#searchEnginesContainer .searchContainer input[name='key'] {
+          width: 30vw;  ;padding: 8px;
+}
+
+#searchEnginesContainer .searchContainer {
+    width: 50vw;
+}
+
 }
 /* Landscape phone to portrait tablet***************************************** */
 @media (max-width: 767px) {
-
-
  #col , .carousel-cell {
   width: 48%;
   padding: 2px;
@@ -640,10 +652,15 @@ display: block;
 #linksMenu {
   display: none;
 }
-
-
 /* end of navigation section.............................................*/
+#searchEnginesContainer .searchContainer input[name='key'] {
+          width: 36vw;  ;padding: 8px;
+}
 
+#searchEnginesContainer .searchContainer {
+    width: 60vw;
+    margin-top: 0px;
+}
  }
 /* Landscape phones and down........................................ */
 @media (max-width: 480px) {
@@ -737,7 +754,15 @@ display: block;
   display: block;
 }
 
+#searchEnginesContainer .searchContainer {
+    margin-top: 0%;
+    display: block;
+    width: 100%;
+}
 
+#searchEnginesContainer .searchContainer input[name='key'] {
+           width: 80%;
+}
 
 
 /* end of my own css....................*/

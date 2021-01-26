@@ -28,11 +28,23 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */ 
+    public function __construct(){
+        $this->middleware('auth',['only'=> ['create','store','show','edit','update','destroy','user_cat_products','premium_product','premium_confirm','delete_premium_request']]);
+         $this->middleware('preventBackHistory',['only'=> ['create','store','show','edit','update','destroy','user_cat_products','premium_product','premium_confirm','delete_premium_request']]);
+        // $this->middleware('preventBackHistory',['only'=>['index','store','show','edit','update']]);
+    }
+
     public function index()
     {
         //
     }
+      // if (Auth::user()->id == $product->user_id) {
+       
+
+      // }else{
+      //   return redirect()->back();
+      // }
 
     /**
      * Show the form for creating a new resource.
@@ -76,7 +88,7 @@ class ProductsController extends Controller
             $photo->update(['product_id'=>$product->id,'name'=>$photo->name]);
         }
          session()->flash("product_added","One product has been successfully added");
-        return redirect()->route('user.index');
+        return redirect()->route('user.index'); 
 
     }
 
@@ -88,11 +100,17 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-       $product = Product::findOrFail($id);
-       $cat = new UsersController();
-       $categories = $cat->userCategories();
-       $cat_count = $categories->count();
-       return view('products.show',compact('product','categories','cat_count'));
+      $product = Product::findOrFail($id);
+      if (Auth::user()->id == $product->user_id) {
+         $cat = new UsersController();
+         $categories = $cat->userCategories();
+         $cat_count = $categories->count();
+         return view('products.show',compact('product','categories','cat_count'));       
+
+      }else{
+        return redirect()->back();
+      }
+
     }
 
    public function item_preview($type,$id){
@@ -140,15 +158,20 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        
-       $product = Product::findOrFail($id);
+     $product = Product::findOrFail($id);
+      if (Auth::user()->id == $product->user_id) {
        $cats = Category::pluck('name','id')->all();
        $brands = Brand::pluck('name','id')->all();
        $periods = Period::pluck('name','id')->all();
        $cat = new UsersController();
        $categories = $cat->userCategories();
        $cat_count = $categories->count();
-       return view('products.edit',compact('product','brands','cats','periods','categories','cat_count'));
+       return view('products.edit',compact('product','brands','cats','periods','categories','cat_count'));       
+
+      }else{
+        return redirect()->back();
+      }
+        
     }
 
     /**
@@ -162,6 +185,7 @@ class ProductsController extends Controller
     {
  
         $product = Product::findOrFail($id);
+      if (Auth::user()->id == $product->user_id) {
         $user = Auth::user();
         $product->product_name = $data->get('product_name');
         $product->product_price = $data->get('product_price');
@@ -172,7 +196,12 @@ class ProductsController extends Controller
         $product->period_id = $data->get('period_id');
         $product->update();
         session()->flash("updated","Product successful updated");
-        return redirect()->route('product.show',$id);
+        return redirect()->route('product.show',$id);    
+
+      }else{
+        return redirect()->back();
+      }
+
     }
 
     /**
@@ -183,9 +212,15 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        Product::findOrFail($id)->delete();
+       $product =  Product::findOrFail($id);
+     if (Auth::user()->id == $product->user_id) {
+        $product->delete();
         session()->flash("product_deleted","Product successful deleted");
         return redirect()->route('user.index');
+     }else{
+      return redirect()->back();
+     }
+
 
     }
 
@@ -315,7 +350,6 @@ class ProductsController extends Controller
              }
 
          // user category products.............................
-
           public function user_cat_products($cat_id){
               $user_id = Auth::user()->id;
               $products  = Product::where('user_id','=',$user_id)->where('category_id','=',$cat_id)->simplePaginate(10);
@@ -327,10 +361,9 @@ class ProductsController extends Controller
               return view('products.user_cat_products',compact('products','categories','cat_count','universities','regions'));
           }
 
-
           public function premium_product(){
            $user_id = Auth::user()->id;
-           $products = Product::where('user_id','=',$user_id)->simplePaginate(6);
+           $products = Product::where('user_id',$user_id)->simplePaginate(10);
            $cat = new UsersController();
            $categories = $cat->userCategories();
            $cat_count = $categories->count();
@@ -339,9 +372,10 @@ class ProductsController extends Controller
 //checking the status/level of a product
           Public function premium_confirm($id){
             $product = Product::findOrFail($id);
-            $premium_products_count = Product::where('premium','=',1)->count();
+            if (Auth::user()->id == $product->user_id) {
+            $premium_products_count = Product::where('premium',1)->count();
             $premium_request_count = Premium_request::all()->count();
-            $p_request = Premium_request::where('product_id','=',$id)->get();
+            $p_request = Premium_request::where('product_id',$id)->get();
             $item_count = $p_request->count();
             if ($product->premium == 1) {
               //the product is already premium
@@ -366,7 +400,13 @@ class ProductsController extends Controller
             $phone = Auth::user()->whatsapp_phone;
            }
 
-           return view('products.premium_confirm',compact('product','categories','cat_count','phone','status','p_request'));
+           return view('products.premium_confirm',compact('product','categories','cat_count','phone','status','p_request'));  
+
+            }else{
+              return redirect()->back();
+            }
+
+
           }
 
           public function delete_premium_request($id){

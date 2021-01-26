@@ -487,16 +487,6 @@ box-shadow: 2px 2px 4px black;
 }
 /* Landscape phone to portrait tablet***************************************** */
 @media (max-width: 767px) {
-#searchEnginesContainer .searchContainer {
-    padding: 4px 25px;
-    display: inline-block;
-    min-height: 80vh;
-    background-color: red;
-    margin-top: 5%;
-    
-}
-
-
  #col , .carousel-cell {
   width: 48%;
   padding: 2px;
