@@ -67,10 +67,9 @@ class ChuoproductsController extends Controller
         $operation_systems = Os::all();
         $categories = $cat->userCategories();
         $cat_count = $categories->count();
-        $cats = Category::orderBy('name','asc')->get();
         $brands = Brand::orderBy('name','asc')->get();
         $form_id = rand(100,10000).substr(time(),5);
-        return view('products.add_chuo_item',compact('brands','cats','form_id','categories','cat_count','types','operation_systems'));
+        return view('products.add_chuo_item',compact('brands','form_id','categories','cat_count','types','operation_systems'));
     }
 
     /**

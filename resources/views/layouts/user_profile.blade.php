@@ -108,7 +108,7 @@
                  <a href="{{ route('chuoproduct.index') }}" class="text-primary d-block">Chuobusiness Shop</a>
                  @endif
                  <a href="{{ route('user.index') }}" class="text-info">View Products</a>
-                 <a href="{{ route('user.shop',Auth::user()->id) }}" class="text-info">Shop Mode</a>
+                 <a href="{{ route('user.shop',Auth::user()->email) }}" class="text-info">My shop</a>
                  @if($cat_count > 0)
                   @foreach($categories as $category)
                    

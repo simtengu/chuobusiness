@@ -30,7 +30,7 @@
             </div>
             <div id="brandDiv" class="form-group col-sm-6">
               <label for="brand_name" class="text-18 text-arial">Brand(if any)</label>
-               <select id="brand_name" name="brand_id" class="form-control">
+               <select required id="brand_name" name="brand_id" class="form-control">
                  <option value="" selected>Select Brand</option>
                  @foreach($brands as $brand)
                   <option value="{{ $brand->id }}">{{  $brand->name }}</option>

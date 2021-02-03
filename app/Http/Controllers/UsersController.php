@@ -55,8 +55,8 @@ class UsersController extends Controller
           $productsClass = new ProductsController();
           $universities = $productsClass->topUniversities();
           $regions = $productsClass->regions();
-          $regions = Region::orderBy('name','asc')->get();
-        return view('register',compact('regions','universities','regions'));
+          $Regions = Region::orderBy('name','asc')->get();
+        return view('register',compact('regions','universities','Regions'));
     }
 
     /**
@@ -206,10 +206,10 @@ class UsersController extends Controller
  }
 
 
- public function user_shop($id){
-    $user = User::findOrFail($id);
-    $products = Product::where('user_id','=',$id)->paginate(20);
+ public function user_shop($email){
+    $user = User::whereEmail($email)->first();
+    $products = Product::where('user_id',$user->id)->paginate(20);
     return view('user_profile.user_shop_view',compact('products','user'));
  }
  
-}
+} 

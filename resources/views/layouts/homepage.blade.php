@@ -252,13 +252,18 @@
 					 	</form>	
 				 	</div>
 				 </li>
+				 @auth
+				   @if(Auth::user()->isSuperAdmin())
+				   <li><a class="navlink" href="{{ route('dashboard',12) }}">Admin</a></li>
+				   @endif
+				 @endauth
 				 <li><a class="navlink" href="{{ route('contact_us') }}">Contact Us</a></li>
 				 @if(!Auth::check())
 				 <li><a class="navlink" href="{{ route('user.create') }}">Register</a></li>
 				 @endif				 
 				 <li style="position: relative;" id="lg">
 			     @if(Auth::check())
-			        <a id="profile-link" href="#" role="button" class="navlink">Profile</a>
+			        <a id="profile-link" href="#" role="button" class="navlink"><i class="icon-user"></i>Profile</a>
 			           <div id="profile-container" class="d-none">
 			               <div id="logout-profile-div" class="d-flex flex-column bg-logo">
 			               	 <div style="border-bottom: 1px solid #a55316" id="flex-item">

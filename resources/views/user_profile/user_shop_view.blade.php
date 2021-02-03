@@ -17,6 +17,13 @@
         text-decoration: none !important;
       }
 
+      .link{
+        text-decoration: none;
+      }
+      .link:hover {
+        text-decoration: none;
+      }
+
       #product-div #products_table {
         min-width: 100%;
       }
@@ -101,6 +108,9 @@
   visibility: visible;
   opacity: 1;
 }
+.media:hover {
+   box-shadow: 2px 2px 4px black;
+}
     </style>
 </head>
 <body class="p-0 m-0">
@@ -145,17 +155,42 @@
    <div class="row pb-4">
     @if(Auth::check() && Auth::user()->id == $user->id)
      <div class="col-12 mt-2">
-        <input style="padding: 2px; border-radius: 4px;" type="text" class="border border-info " value="{{ route('user.shop',$user->id) }}" id="myInput">
+        <input style="padding: 2px; border-radius: 4px;" type="text" class="border border-info " value="{{ route('user.shop',$user->email) }}" id="myInput">
        <button onclick="myFunction()" class="btn btn-sm btn-info">Copy shop link</button>
        <label id="copy_message" class="text-success d-block mt-2 text-18 text-times"></label>
      </div>
      @endif
-     <div  class="col-md-3 d-flex justify-content-center ">
+     <div  class="col-md-2 bg-primary d-flex justify-content-center ">
           <!-- advertisment here.............. -->
      </div>
  <!--     profile main section...................................................... -->
-     <div style="min-height: 70vh !important" class="col-md-8">
-      <div class="row py-2">
+     <div style="min-height: 70vh !important" class="col-md-10">
+      <div class="row">
+      @if(count($products))
+         @foreach($products as $product)
+         @if(count($product->photo))
+         <div class=" col-md-6 col-lg-4 mt-1">
+          <a class="link" href="{{ route('item_preview',[1,$product->id]) }}">
+            <div class="media border p-1">
+              <img style="width: 45%; height: auto;" src="{{ asset('images') }}/{{ $product->photo[0]->name }}" >
+              <div class="media-body p-1">
+                <h5 class="font-weight-bold text-arial text-16">{{ $product->product_name }}</h5>
+                  <label class="mb-0 text-dark">{{ number_format($product->product_price)  }}<span class="text-warning">Tsh</span></label>
+                <p class="card-text text-times text-dark">
+                  {{ Str::limit($product->product_description,45) }}
+                </p>    
+              </div>
+            </div>
+           </a>
+         </div>
+          @endif
+        @endforeach
+       @else 
+       <h4 class="text-info text-uppercase ">No products yet</h4>
+      @endif
+      </div>
+
+<!--       <div class="row py-2">
       @if(count($products))
          @foreach($products as $product)
          @if(count($product->photo))
@@ -180,7 +215,7 @@
       @endif
 
 
-      </div>
+      </div> -->
    <!--    pagination..................... -->
          <div class="text-center mt-2">
            @if(count($products))
@@ -191,9 +226,6 @@
 
      </div>
  <!-- end of profile main section................................................... -->
-     <div class="col-md-1">
-        
-     </div>
    </div>
  </div>
  <!-- window preloader div............................................ -->

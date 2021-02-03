@@ -1,11 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductsController;
 use App\User;
+use App\Region;
 use App\Product;
+use App\Category; 
 use App\Chuoproduct;
-use App\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminProductsController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ProductsController;
 
 Route::get('/', function () {
   $chuoproducts = Chuoproduct::latest()->get();
@@ -28,20 +33,22 @@ Route::get('/email_validation/{email}', function($email){
    }else{
    	return "no";
    }
-
-});
+}); 
 Route::post('/login','UsersController@login')->name('login');
 Route::post('/logout',function(){
     	Auth::logout();
     	return redirect('/');
 })->name('signout');
-//end of authentication routes..................................
-Route::view('/contact_us','contact_us')->name('contact_us');
+//end of authentication routes................................................
+  $productsClass = new ProductsController();
+  $universities = $productsClass->topUniversities();
+  $regions = $productsClass->regions();
+  $Regions = Region::orderBy('name','asc')->get();
+Route::view('/contact_us','contact_us',['universities'=>$universities,'regions'=>$regions,'Regions'=>$Regions])->name('contact_us');
 Route::post('/image_save','ProductsController@image_save')->name('image_save');
 Route::post('/picture_save','ProductsController@picture_save')->name('picture_save');
 Route::get('/product/delete_image/{id}','ProductsController@delete_image')->name('delete_image');
 Route::get('/product/delete_picture/{id}','ProductsController@delete_picture')->name('delete_picture');
-
 Route::get('/product/ajax_image_delete/{id}','ProductsController@delete_image_ajax')->name('ajax.image_delete');
 Route::get('/product/ajax_picture_delete/{id}','ProductsController@delete_picture_ajax')->name('ajax.picture_delete');
 //adding item image in edit page
@@ -55,7 +62,7 @@ Route::post('/premium','ProductsController@premium_check')->name('premium_check'
 Route::delete('/premium_delete/{id}','ProductsController@delete_premium_request')->name('premium.request.delete');
 Route::patch('/user/password_reset/{user_id}','UsersController@password_reset')->name('password_reset');
 //user shop route...................................................................
-Route::get('/user/shop/{id}','UsersController@user_shop')->name('user.shop');
+Route::get('/user/shop/{id}',[UsersController::class, 'user_shop'])->name('user.shop');
 //products details and more information route.........................................
 Route::get('/item/{type}/{id}', 'ProductsController@item_preview')->name('item_preview');
 //products filtering route..........................................
@@ -85,6 +92,32 @@ Route::get('/regionItemSearch/{order}/{region_id}/{product_id}','ProductsControl
 Route::get('/universityItemSearch/{order}/{university_id}/{product_id}','ProductsController@university_search_results')->name('university.searched_item');
 
 Route::get('/nationwiseItemSearch/{order}/{product_id}','ProductsController@nation_search_results')->name('nationwise.searched_item');
- // position: absolute;bottom: 0px;left:50px;
 // Route::get('/home', 'HomeController@index')->name('home');
-
+//administrator routes.........................................................................
+Route::get('/administrator/{range}',[AdminController::class, 'index'] )->name('dashboard');
+Route::get('/administrator/user_details/{email}','AdminController@user_details')->name('admin.user_details');
+Route::get('/admin_email_fetch/{key}', function($key){
+   $users = User::where('email','LIKE',"%{$key}%")->get();
+   if (count($users) > 0) {
+     $result = "";
+     foreach ($users as $user) {
+       $result .= "<li class='list-group-item p-1 border-bottom'><a class='d-block' href='".route('admin.user_details',$user->email)."'>".$user->email."</a></li>";
+     }
+     return $result;
+      
+   }else{
+    return "<li class='list-group-item p-1'>Nothing found </li>";
+   }
+});
+Route::post('/messageStore',[AdminController::class, 'messageStore'])->name('messageStore');
+Route::post('/collegeRequestStore',[AdminController::class, 'collegeRequestStore'])->name('collegeRequestStore');
+Route::post('/messageStore',[AdminController::class,'messageStore'])->name('messageStore');
+Route::get('/viewMessages',[AdminController::class,'getMessages'])->name('getMessages');
+Route::resource('/adminProduct','AdminProductsController');
+Route::delete('/messageDelete/{id}', 'AdminController@deleteMessage')->name('deleteMessage');
+Route::delete('/collegeRequestDelete/{id}', 'AdminController@deleteCollegeRequest')->name('deleteCollegeRequest');
+Route::get('/admin/userPasswordReset/{id}','AdminController@password_reset')->name('admin.userPasswordReset');
+Route::get('/admin/changeUserRole','AdminController@changeUserRole')->name('admin.changeUserRole');
+Route::get('/reportPost/{id}','AdminController@reportPost')->name('reportPost');
+Route::get('/reportedPosts','AdminController@reportedPosts')->name('admin.reportedPosts');
+Route::delete('/deleteReportedPost/{id}', 'AdminController@deleteReportedPost')->name('admin.deleteReportedPost');

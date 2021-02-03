@@ -135,7 +135,7 @@
 			<div class="controls">
 			  <select id="reg_regions">
 			  	<option value="" selected="selected">Select region</option>
-                @foreach($regions as $region)
+                @foreach($Regions as $region)
                   <option value="{{ $region->id }}">{{ $region->name }}</option>
                 @endforeach
 			  </select>

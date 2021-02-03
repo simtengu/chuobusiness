@@ -1,6 +1,16 @@
 @extends('layouts.homepage')
 @section('content')
 
+                      @if(session()->has('product_reported'))
+                      <div class="row">
+                        <div class="col-12 pt-3">
+                          <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <span>{{ session('product_reported') }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      @endif
 @if($type == 1)
 	<div class="row">
 	<!-- Sidebar ================================================== -->
@@ -56,7 +66,13 @@
 						<label class="text-16">{{ $product->user->phone_2 ?? "" }}</label>
 						<label class="text-16">{{ $product->user->email }}</label>
 					</div>
-					<a  href="{{ route('user.shop',$product->user_id) }}"> <h5 class="text-orange text-arial text-16 ">More items from this item owner</h5></a>
+					<a  href="{{ route('user.shop',$product->user->email) }}"> <h5 class="text-orange text-arial text-16 ">More items from this item owner</h5></a>
+					<hr class="soft"/>
+					<div style="border: 1px solid red; display:inline-block; padding: 7px; border-radius: 5px; margin-top: 10px">
+						 <p style="color: red" class="text-times text-18">Is this post inappropriate?</p>
+						 <a style="padding: 3px;" href="{{ route('reportPost',$product->id) }}" class="btn btn-md btn-danger">Click to report it</a>
+
+					</div>
 				</div>
               </div>
 

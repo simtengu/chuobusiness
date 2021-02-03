@@ -210,7 +210,7 @@
 			<div id="col">
 					  <div class="thumbnail">
 					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
+					  		<a href="{{ route('item_preview',[1,$product->id]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
 					  	</div>
 					  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
 						<div class="caption">
