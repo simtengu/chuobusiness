@@ -96,15 +96,22 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ route('dashboard',10) }}">
+                            <a  class="nav-link text-uppercase" href="{{ route('dashboard',10) }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-
+                            <a  class="nav-link text-capitalize" href="{{ route('admin.categories') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Categories&Brands
+                            </a>
+                            <a  class="nav-link text-capitalize" href="{{ route('admin.viewUniversities') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Universities
+                            </a>
+                            
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
+                                Main Operations
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -118,7 +125,13 @@
                                     <a class="text-light " href="{{ route('admin.reportedPosts') }}" >
                                         Reported posts
                                     </a>
-
+                                    <a class="text-light " href="{{ route('admin.getPremiumProducts') }}" >
+                                       All Premium products
+                                    </a>
+                                    <a class="text-light " href="{{ route('admin.premium_requests') }}" >
+                                        Premium requests
+                                    </a>
+                                    
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
                                         Authentication
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>

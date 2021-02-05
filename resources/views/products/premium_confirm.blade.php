@@ -24,6 +24,7 @@
        </div> 
    <!--     end of delete form ............................. -->
          @elseif($status == 3)
+         {{-- there is a room for upgrading the product to premium............................ --}}
           <div class="card mb-2">
             <div id="premium_heading" class="card-header text-info"> <h5 style="font-family: arial narrow">All Procedures</h5></div>
             <div class="card-body" style="font-family: times new roman;">
@@ -66,6 +67,7 @@
                   <h3>{{ config('global.vodapayment_number') }} Mpesa</h3>
                   <label>or</label>
                   <h3>{{ config('global.tigopayment_number') }} TigoPesa</h3>
+                   <label>Name: {{ config('global.albert') }}</label>
                  </div>
                </div>
                 <div class="p-2 text-info">The product will automatically be upgradated to premium within few minutes after your payment.</div>

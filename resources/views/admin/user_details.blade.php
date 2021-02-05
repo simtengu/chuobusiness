@@ -71,6 +71,7 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
+                                                <th>Phone2</th>
                                                 <th>Region</th>
                                                 <th>University</th>
                                                 <th>update</th>
@@ -82,6 +83,7 @@
                                                 <td>{{ $user->fname }} {{ $user->lname }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>{{ $user->whatsapp_phone }}</td>
+                                                <td>{{ $user->phone_2 ?? "" }}</td>
                                                 <td>{{ $user->university->region->name }}</td>
                                                 <td>{{ $user->university->name }}</td>
                                                 <td>

@@ -121,3 +121,21 @@ Route::get('/admin/changeUserRole','AdminController@changeUserRole')->name('admi
 Route::get('/reportPost/{id}','AdminController@reportPost')->name('reportPost');
 Route::get('/reportedPosts','AdminController@reportedPosts')->name('admin.reportedPosts');
 Route::delete('/deleteReportedPost/{id}', 'AdminController@deleteReportedPost')->name('admin.deleteReportedPost');
+Route::delete('/deletePremiumLog/{id}', 'AdminController@deletePremiumLog')->name('admin.deletePremiumLog');
+Route::get('/premium_requests','AdminController@premium_requests')->name('admin.premium_requests');
+Route::get('/adminPremiumRequestVerify/{product_id}','AdminController@verifyPremiumRequest')->name('admin.verifyPremiumRequest');
+Route::get('/getPremiumProducts','AdminController@getPremiumProducts')->name('admin.getPremiumProducts');
+Route::get('/getCategories','AdminController@getCategories')->name('admin.categories');
+Route::post('/addCategory', [AdminController::class,'addCategory'])->name('admin.addCategory'); 
+Route::post('/addBrand', [AdminController::class,'addBrand'])->name('admin.addBrand'); 
+Route::get('/editBrand/{brand_id}','AdminController@editBrand')->name('admin.editBrand');
+Route::get('/editCategory/{category_id}','AdminController@editCategory')->name('admin.editCategory');
+Route::patch('/categoryUpdate/{category_id}','AdminController@updateCategory')->name('admin.updateCategory');
+Route::patch('/brandUpdate/{brand_id}','AdminController@updateBrand')->name('admin.updateBrand');
+Route::delete('/deleteBrand/{brand_id}','AdminController@deleteBrand')->name('admin.deleteBrand');
+Route::delete('/deleteCategory/{category_id}','AdminController@deleteCategory')->name('admin.deleteCategory');
+Route::get('/viewUniversities','AdminController@viewUniversities')->name('admin.viewUniversities');
+Route::post('/addUniversity','AdminController@addUniversity')->name('admin.addUniversity');
+Route::get('/editUniversity/{uv_id}','AdminController@editUniversity')->name('admin.editUniversity');
+
+

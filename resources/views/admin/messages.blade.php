@@ -1,7 +1,6 @@
 @extends('layouts.admin')           
 @section('content')
-                    <div class="container-fluid">
-                        <h1 class="mt-4">Dashboard</h1>
+                    <div class="container-fluid py-3">
                         <div class="card mb-3">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>

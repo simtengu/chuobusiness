@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Brand;
+use App\Category;
+use App\Log;
 use App\Role;
 use App\User;
 use App\Region;
+use App\University;
 use App\Product;
+use App\Premium_request;
 use Illuminate\Http\Request;
 use App\Http\Requests\Message;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CollegeRequest;
+use App\PremiumItem;
 
 class AdminController extends Controller
 {
@@ -122,5 +128,110 @@ class AdminController extends Controller
        return redirect()->back();
    }
 
+   public function deletePremiumLog($id){
+       Log::findOrFail($id)->delete();
+       return redirect()->back();
+   }
+   
+   public function premium_requests(){
+
+     $premium_logs = Log::all();
+     $premium_requests = Premium_request::all();
+     return view('admin.premium_requests',compact('premium_logs','premium_requests'));
+   }
+
+   public function verifyPremiumRequest($id){
+      $product  = Product::findOrFail($id);
+      $product->premium = 1;
+      $product->save();
+      Premium_request::where('product_id',$id)->delete();
+      PremiumItem::create(['product_id'=>$id]);
+      Session()->flash('premium_request_verified', "one product has been upgraded to premium");
+     return redirect()->back();
+   }
+
+   public function getPremiumProducts(){
+     $premium_products = PremiumItem::all();
+     return view('admin.view_premium_products',compact('premium_products'));
+   }
+
+   public function getCategories(){
+     $brands = Brand::all();
+     $categories = Category::all();
+     return view('admin.categories',compact('brands','categories'));
+   }
+
+   public function addCategory(Request $data){
+     Category::create(['name'=> $data->category]);
+     session()->flash('category_added','One category has been added');
+     return redirect()->back();
+   }
+
+   public function addBrand(Request $data){
+     Brand::create(['name'=> $data->brand]);
+     session()->flash('brand_added','One brand has been added');
+     return redirect()->back();
+   }
+   public function editBrand($brand_id){
+
+       $brand = Brand::findOrFail($brand_id);
+       return view('admin.editcategory',compact('brand'));
+   }
+
+   public function editCategory($category_id){
+       $category = Category::findOrFail($category_id);
+       return view('admin.editcategory',compact('category'));
+   }
+
+  public function updateBrand(Request $request, $id){
+        $brand = Brand::findOrFail($id);
+        $brand->name = $request->name;
+        $brand->save();
+        session()->flash('brand_updated','A brand has been updated');
+        return redirect()->route('admin.categories');
+  }
+
+  public function updateCategory(Request $request, $id){
+      $category = Category::findOrFail($id);
+      $category->name = $request->name;
+      $category->save();
+      session()->flash('category_updated','A category has been updated');
+      return redirect()->route('admin.categories');
+  }
+
+  public function deleteBrand($brand_id){
+    Brand::findOrFail($brand_id)->delete();
+    session()->flash('brand_deleted','One Brand has been deleted');
+    return redirect()->route('admin.categories');
+  }
+
+  public function deleteCategory($category_id){
+    Category::findOrFail($category_id)->delete();
+    session()->flash('category_deleted','One category has been deleted');
+    return redirect()->route('admin.categories');  
+  }
+
+  public function viewUniversities(){
+   $regions = Region::orderBy('name','asc')->get();
+
+    $universities = University::select('universities.*')
+    ->join('regions', 'regions.id', '=', 'universities.region_id')
+    ->orderBy('regions.name')
+    ->get();    
+      
+      return view('admin.viewUniversities',compact('regions','universities'));
+
+  }
+
+  public function addUniversity(Request $data){
+      $uv = new University();
+      $uv->create($data->all());
+    session()->flash('university_added','One university has been added');
+    return redirect()->back();
+  }
+
+  public function editUniversity($university_id){
+    return "ready to update uv";
+  }
 
 }

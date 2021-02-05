@@ -434,6 +434,7 @@ class ProductsController extends Controller
                 ]);
                 
             }else{
+                 Log::create(['user_id'=> Auth::user()->id,'message'=>'premium request']);
                 return response()->json([
                  "status"=> 3, "message"=>"sorry premium section space has just been fully taken"
                 ]);

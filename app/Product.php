@@ -3,14 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Product extends Model
-{
-    protected $fillable = ['product_name','category_id','product_price','product_description','period_value','period_id','university_id','brand_id','id','user_id'];
+{  
+   use Sluggable;
+    protected $fillable = ['product_name','category_id','product_price','product_description','period_value','period_id','university_id','brand_id','id','user_id','slug'];
 
 
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'product_name'
+            ]
+        ];
+    }
 
-        public function brand(){
+        public function brand(){ 
             return $this->belongsTo('App\Brand');
         }
 
