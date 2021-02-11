@@ -11,6 +11,7 @@ use App\Chuoproduct;
 use App\ChuoproductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class AdminProductsController extends Controller
 {
@@ -19,6 +20,10 @@ class AdminProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+      $this->middleware(['auth','super_admin','preventBackHistory']);
+    }
+
     public function index()
     {
        
@@ -39,7 +44,7 @@ class AdminProductsController extends Controller
     public function create()
     {
         $types = ChuoproductType::all();
-        $users = User::where('role_id',1)->get();
+        $users = User::where('role_id',2)->get();
         $operation_systems = Os::all();
         $brands = Brand::orderBy('name','asc')->get();
         $form_id = rand(100,10000).substr(time(),5);
@@ -123,6 +128,7 @@ class AdminProductsController extends Controller
     public function update(Request $request, $id)
     {
         $product = Chuoproduct::findOrFail($id);
+        $product->slug = null;
         $data = $request->except('form_id');
         if (Auth::user()->isAdmin()) {
           $product->update($data);
@@ -131,7 +137,7 @@ class AdminProductsController extends Controller
 
         }
     }
-
+ 
     /**
      * Remove the specified resource from storage.
      *
@@ -141,6 +147,14 @@ class AdminProductsController extends Controller
     public function destroy($id)
     {
          Chuoproduct::findOrFail($id)->delete();
+              $images =  Image::where('chuoproduct_id',$id)->get();
+               foreach($images as $image){
+                $pic_name = $image->name;
+                 if (File::exists(public_path('/pictures').'/'.$pic_name)) {
+                   File::delete(public_path('/pictures').'/'.$pic_name);
+                 }
+                 $image->delete();
+               }
             session()->flash("product_deleted","Product successful deleted");
             return redirect()->route('adminProduct.index');
     }

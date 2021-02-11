@@ -10,12 +10,12 @@
       		</div>
       		<div>
       			<button class="sidebar-close-btn ">x</button>
-      		</div>
+      		</div> 
       	</div>
       	@if(count($categories))
       	 <ul id="sideManuu" class="nav nav-tabs nav-stacked">
 			@foreach($categories as $category)
-			<li><a href="{{ url('/category_products') }}/{{ $category->id }}/1">{{ $category->name }}</a></li>
+			<li><a href="{{ url('/category_products') }}/{{ $category->slug }}/latest">{{ $category->name }} <span style="color: #0069c2;font-size: 16px;" class="badge">{{ $category->total }}</span></a></li>
 			@endforeach
 		</ul>
 		@endif
@@ -95,7 +95,7 @@
 		</div>
 
 		<div class="form">
-			 <a href="smartphones.html"><button id="cat-form-button"  class="btn padding-3 "> Our laptop&smartphone shop</button></a>
+			 <a href="{{  route('customer.chuobusiness_products') }}"><button id="cat-form-button"  class="btn padding-3 "> Our laptop&smartphone shop</button></a>
 		</div>
 	</div>
 </div>

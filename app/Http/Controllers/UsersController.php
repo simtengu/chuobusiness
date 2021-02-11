@@ -1,16 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\ProductsController;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Http\Requests\Signup;
+
+use App\Role;
+use App\User;
 use App\Region;
 use App\Product;
-use App\User;
-use App\Role;
 use App\University;
+use App\Chuoproduct;
+use Illuminate\Http\Request;
+use App\Http\Requests\Signup;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\ProductsController;
+use App\Mail\VerifyAccount;
+
 class UsersController extends Controller
 {
     /**
@@ -69,6 +74,8 @@ class UsersController extends Controller
     {
 
         $jj = new User();
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $code = substr(str_shuffle($permitted_chars), 0, 14);
         $jj['fname'] = $data->get('fname');
         $jj['lname'] = $data->get('lname');
         $jj['email'] = $data->get('email');
@@ -76,9 +83,13 @@ class UsersController extends Controller
         $jj['university_id'] = $data->get('university_id');
         $jj['phone_2'] = $data->get('phone_2');
         $jj['password'] = Hash::make($data->get('password'));
+        $jj['reset_code'] = $code;
         $jj->save();
-        Auth::login($jj,true);
-           Session()->flash('registration_session',Auth::user()->fname.' your account was successfully created....You are welcome');
+        $info  = array('email' => $data->get('email'),'code'=>$code );
+        Mail::to($data->get('email'))->send(new VerifyAccount($info));
+        
+        // Auth::login($jj,true);
+           Session()->flash('registration_session',$data->get('fname').' your account was successfully created....Use a link sent to your email to activate it');
         return redirect('/');
       
       
@@ -197,19 +208,34 @@ class UsersController extends Controller
     }
     $email = $credentials['email'];
     $pwd = $credentials['password'];
-    
-    if (Auth::attempt(['email'=>$email,'password' =>$pwd],$remember)) {
-        return "ok";
-    }else{ 
-        return "wrong email or password";
+    $user_count = User::where('email',$email)->count();
+    if($user_count > 0){
+        $user = User::where('email',$email)->first();
+       if($user->verified == true){
+        if (Auth::attempt(['email'=>$email,'password' =>$pwd],$remember)) {
+            return "ok";
+        }else{ 
+            return "wrong email or password";
+        }
+
+      }else{
+        return "your account is not activated.. use a link sent to your email to activate it";
+
+     }
+
+    }else{
+        return "Wrong email or password";
     }
+
+
  }
 
 
  public function user_shop($email){
     $user = User::whereEmail($email)->first();
     $products = Product::where('user_id',$user->id)->paginate(20);
-    return view('user_profile.user_shop_view',compact('products','user'));
+    $chuoproducts = Chuoproduct::where('user_id',$user->id)->get();
+    return view('user_profile.user_shop_view',compact('products','user','chuoproducts'));
  }
  
 } 

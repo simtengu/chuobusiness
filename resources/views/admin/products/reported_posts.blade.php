@@ -15,6 +15,7 @@
                                                 <th>Region</th>
                                                 <th>University</th>
                                                 <th>view</th>
+                                                <th>Action</th>
                                                 <th>Delete</th>
                                                
                                             </tr>
@@ -27,7 +28,10 @@
                                                 <td>{{ $product->user->whatsapp_phone }}</td>
                                                 <td>{{ $product->university->region->name }}</td>
                                                 <td>{{ $product->university->name }}</td>
-                                                <td><a href="{{ route('item_preview',[1,$product->id]) }}" class="btn btn-md btn-primary">view</a></td>
+                                                <td><a href="{{ route('item_preview',[1,$product->slug]) }}" class="btn btn-md btn-primary">view</a>
+                                                </td>
+                                                <td><a href="{{ route('admin.checkReportedProduct',$product->id) }}" class="btn btn-md btn-warning">action</a>
+                                                </td>
                                                 <td>
                                                     {!! Form::open(['method'=>'DELETE','action'=>['AdminController@deleteReportedPost',$product->id]]) !!}
                                                     <button type="submit" class="btn btn-danger btn-md px-3">Delete</button>

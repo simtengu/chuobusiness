@@ -17,7 +17,7 @@
           <div class="col-12 pt-3">
             <div class="alert alert-success alert-dismissible">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
-             <span>{{ session('product_deleted') }}</span>
+              <span>{{ session('product_deleted') }}</span>
             </div>
           </div>
         </div>
@@ -29,7 +29,7 @@
         <div id="profile-content">
       @if(count($products))
          @foreach($products as $product)
-          <a id="link" href="{{ route('chuoproduct.show',$product->id) }}">
+          <a id="link" href="{{ route('chuoproduct.show',$product->slug) }}"> 
           <div id="product-div" >
             <table id="products_table">
              <tr>

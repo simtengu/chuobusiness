@@ -90,7 +90,7 @@
                                                 <td>{{ $message->product->user->email }}</td>
                                                 <td>{{ $message->product->user->whatsapp_phone }}</td>
                                                 <td><a href="{{ route('admin.verifyPremiumRequest',$message->product_id) }}" class="btn btn-info btn-md">verify</a></td>
-                                                <td><a  href="{{ route('item_preview',[1,$message->product_id]) }}" class="btn btn-success btn-md">view</a></td>
+                                                <td><a  href="{{ route('item_preview',[1,$message->product->slug]) }}" class="btn btn-success btn-md">view</a></td>
                                             </tr>
                                             <?php $b++; ?>
                                         @endforeach

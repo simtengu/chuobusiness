@@ -105,7 +105,7 @@
                             @if(count($products))
                                @foreach($products as $product) 
                                <div class=" col-md-6 col-lg-4 mt-1">
-                              <a class="link" href="{{ route('item_preview',[1,$product->id]) }}">
+                              <a class="link" href="{{ route('item_preview',[1,$product->slug]) }}">
                                   <div class="media border p-1">
                                     <img style="width: 45%; height: auto;" src="{{ asset('images') }}/{{ $product->photo[0]->name }}" >
                                     <div class="media-body p-1">

@@ -27,7 +27,7 @@
       @if(count($products))
          @foreach($products as $product)
           
-          <a id="link" href="{{ route('product.show',$product->id) }}">
+          <a id="link" href="{{ route('product.show',$product->slug) }}">
           <div id="product-div" >
             <table id="products_table">
              <tr>

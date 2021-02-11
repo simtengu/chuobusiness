@@ -58,7 +58,7 @@
           </tbody>
         </table>
          <div class="d-flex mt-4">
-          <a class="btn btn-warning btn-sm mr-3" href="{{ route('chuoproduct.edit',$product->id) }}">Update</a>
+          <a class="btn btn-warning btn-sm mr-3" href="{{ route('chuoproduct.edit',$product->slug) }}">Update</a>
            <button id="delete-button" class="btn btn-danger btn-sm">Delete</button>
          </div>
         </div>

@@ -8,7 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Product extends Model
 {  
    use Sluggable;
-    protected $fillable = ['product_name','category_id','product_price','product_description','period_value','period_id','university_id','brand_id','id','user_id','slug'];
+    protected $fillable = ['product_name','category_id','product_price','product_description','period_value','period_id','university_id','brand_id','id','user_id','slug','street_name'];
 
 
     public function sluggable(): array

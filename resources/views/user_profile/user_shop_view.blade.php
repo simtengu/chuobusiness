@@ -160,23 +160,23 @@
        <label id="copy_message" class="text-success d-block mt-2 text-18 text-times"></label>
      </div>
      @endif
-     <div  class="col-md-2 bg-primary d-flex justify-content-center ">
+     <div  class="col-lg-2 bg-primary d-flex justify-content-center ">
           <!-- advertisment here.............. -->
      </div>
  <!--     profile main section...................................................... -->
-     <div style="min-height: 70vh !important" class="col-md-10">
+     <div style="min-height: 70vh !important" class="col-lg-10">
       <div class="row">
       @if(count($products))
          @foreach($products as $product)
          @if(count($product->photo))
-         <div class=" col-md-6 col-lg-4 mt-1">
-          <a class="link" href="{{ route('item_preview',[1,$product->id]) }}">
+         <div class=" col-sm-6 col-md-4 mt-1">
+          <a class="link" href="{{ route('item_preview',[1,$product->slug]) }}">
             <div class="media border p-1">
               <img style="width: 45%; height: auto;" src="{{ asset('images') }}/{{ $product->photo[0]->name }}" >
               <div class="media-body p-1">
-                <h5 class="font-weight-bold text-arial text-16">{{ $product->product_name }}</h5>
+                <h5 class="font-weight-bold text-arial text-16">{{ $product->product_name }} @if($product->period_id != null) <span class="text-warning text-times text-16">(used)</span> @endif</h5>
                   <label class="mb-0 text-dark">{{ number_format($product->product_price)  }}<span class="text-warning">Tsh</span></label>
-                <p class="card-text text-times text-dark">
+                <p style="line-height: 18px;" class="card-text text-times text-dark">
                   {{ Str::limit($product->product_description,45) }}
                 </p>    
               </div>

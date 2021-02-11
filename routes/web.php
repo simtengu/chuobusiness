@@ -5,21 +5,31 @@ use App\Region;
 use App\Product;
 use App\Category; 
 use App\Chuoproduct;
+use App\Mail\SendMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminProductsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\AdminProductsController;
+use App\Mail\PasswordReset;
 
 Route::get('/', function () {
+  $premium_products = Product::where('premium',1)->get();
   $chuoproducts = Chuoproduct::latest()->get();
   $productsClass = new ProductsController();
   $universities = $productsClass->topUniversities();
   $regions = $productsClass->regions();
   $categories = Category::all();
+          foreach ($categories as $category) {
+               $count = Product::where('category_id',$category->id)->get()->count();
+               $category->total = $count;
+          }
 	$products = Product::simplePaginate(28);
-    return view('landingpage',compact('products','chuoproducts','categories','universities','regions'));
+    return view('landingpage',compact('products','chuoproducts','premium_products','categories','universities','regions'));
 })->name('home');
 Route::resource('/user','UsersController');
 Route::resource('/product','ProductsController');
@@ -64,11 +74,11 @@ Route::patch('/user/password_reset/{user_id}','UsersController@password_reset')-
 //user shop route...................................................................
 Route::get('/user/shop/{id}',[UsersController::class, 'user_shop'])->name('user.shop');
 //products details and more information route.........................................
-Route::get('/item/{type}/{id}', 'ProductsController@item_preview')->name('item_preview');
+Route::get('/item/{type}/{slug}', 'ProductsController@item_preview')->name('item_preview');
 //products filtering route..........................................
 Route::get('/products/orderby/{order_type}','ProductsController@order_type')->name('products.order_type');
 //category products filtering route.................................
-Route::get('/category_products/{category}/{order_type}','ProductsController@category_order_type')->name('category_products.order_type');
+Route::get('/category_products/{category_slug}/{order_type}','ProductsController@category_order_type')->name('category_products.order_type');
 //specific region products......................................
 Route::get('/region_products/{region_id}/{order_type}','ProductsController@region_products')->name('region_products');
 Route::get('/regionProducts','ProductsController@regionProducts')->name('region.products');
@@ -120,6 +130,7 @@ Route::get('/admin/userPasswordReset/{id}','AdminController@password_reset')->na
 Route::get('/admin/changeUserRole','AdminController@changeUserRole')->name('admin.changeUserRole');
 Route::get('/reportPost/{id}','AdminController@reportPost')->name('reportPost');
 Route::get('/reportedPosts','AdminController@reportedPosts')->name('admin.reportedPosts');
+Route::get('/checkReportedProduct/{id}','AdminController@checkReportedProduct')->name('admin.checkReportedProduct');
 Route::delete('/deleteReportedPost/{id}', 'AdminController@deleteReportedPost')->name('admin.deleteReportedPost');
 Route::delete('/deletePremiumLog/{id}', 'AdminController@deletePremiumLog')->name('admin.deletePremiumLog');
 Route::get('/premium_requests','AdminController@premium_requests')->name('admin.premium_requests');
@@ -137,5 +148,61 @@ Route::delete('/deleteCategory/{category_id}','AdminController@deleteCategory')-
 Route::get('/viewUniversities','AdminController@viewUniversities')->name('admin.viewUniversities');
 Route::post('/addUniversity','AdminController@addUniversity')->name('admin.addUniversity');
 Route::get('/editUniversity/{uv_id}','AdminController@editUniversity')->name('admin.editUniversity');
+Route::patch('/universityUpdate/{uv_id}','AdminController@updateUniversity')->name('admin.updateBrand');
+Route::delete('/deleteUniversity/{uv_id}','AdminController@deleteUniversity')->name('admin.deleteUniversity');
+Route::delete('/deleteReportedProduct/{id}','AdminController@deleteReportedProduct')->name('admin.deleteReportedProduct'); 
+Route::get('/customer/premium_products','ProductsController@customer_premium_products')->name('customer.premium_products');
+Route::get('/customer/chuobusiness_products','ProductsController@chuobusinessProducts')->name('customer.chuobusiness_products');
+//user account verification.......
+Route::get('/chuobusiness/account_verification/{email}/{code}', function($email,$code){
+    $user = User::where('email',$email)->first();
+    if($user->reset_code == $code){
+      $user->verified = true;
+      $user->reset_code = null;
+      Auth::login($user,true);
+      Session()->flash('account_activated', "congratulations your account is now activated, you can add your products now");
+      return redirect()->route('home');
+    }
+})->name('account_verification');
+
+//user lost password reset........................................................
+Route::get('/reset_password', function(){
+    $productsClass = new ProductsController();
+  $universities = $productsClass->topUniversities();
+  $regions = $productsClass->regions();
+  return view('reset_password',compact('regions','universities'));
+})->name('reset_password');
+
+Route::get('/password_reset_link', function(Request $data){
+    $email = $data->email;
+    $user_count = User::where('email',$email)->count();
+    if($user_count == 1){
+      $user = User::where('email',$email)->first();
+      $code = rand(1000,10000);
+      $user->reset_code = $code;
+      $user->save();
+      Mail::to($email)->send(new PasswordReset($code));
+      return redirect()->route('user.password_reset',$email);
+
+    }else{
+      Session()->flash('no_user', "No user with email you typed was found..");
+      return redirect()->back();
+    }
+
+})->name('password_reset_link');
+
+Route::get('user/password_reset/{email}', function($email){
+    $productsClass = new ProductsController();
+  $universities = $productsClass->topUniversities();
+  $regions = $productsClass->regions();
+  return view('user_password_reset',compact('universities','regions','email'));
+})->name('user.password_reset');
+
+Route::patch('/user/password_update/{email}','GeneralController@user_password_update')->name('user.password_update');
+
+// Route::get('/get_it', function(){
+//  return "<a href='".route('home')."'>".route('home')."</a>";
+   
+// });
 
 

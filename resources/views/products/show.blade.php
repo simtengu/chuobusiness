@@ -31,19 +31,19 @@
        </div>
        <div class="row p-2">
         <div class="col-md-6">
-         <h4 class="text-times">{{ $product->product_name }}</h4>
-         @if($product->period_value )<h5 class="text-times">Used for {{ $product->period_value }} {{ $product->period->name }}@if($product->period_value != 1)s @endif</h5> @endif 
+         <h5 class="text-times text-18">{{ $product->product_name }}</h5>
+         @if($product->period_value )<h5 class="text-times text-16">Used for {{ $product->period_value }} {{ $product->period->name }}@if($product->period_value != 1)s @endif</h5> @endif 
          <h5>{{ $product->product_price }} <span class="text-info">Tsh</span></h5> 
         </div>
         <div class="col-md-6">
           <div class="car p-2">
-            <h4 class="text-info text-dark text-times">product description</h4>
+            <h4 class="text-info text-dark text-times text-19">product description</h4>
            <p class="text-lead text-justify text-times">{{ $product->product_description }} </p>  
           </div>
         </div>
         <div class="col-12">
          <div class="d-flex">
-          <a class="btn btn-warning btn-sm mr-3" href="{{ route('product.edit',$product->id) }}">Update</a>
+          <a class="btn btn-warning btn-sm mr-3" href="{{ route('product.edit',$product->slug) }}">Update</a>
            <button id="delete-button" class="btn btn-danger btn-sm">Delete</button>
          </div>
         </div>

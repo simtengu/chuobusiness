@@ -5,177 +5,183 @@
 	<div id="sidebar" class="span3">
 		<ul id="sideManu" class="nav nav-tabs nav-stacked">
 			@foreach($categories as $category)
-			<li><a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $category->id }}/1">{{ $category->name }} <span class="badge">{{ $category->total }}</span></a></li>
+			<li><a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $category->slug }}/latest">{{ $category->name }} <span class="badge">{{ $category->total }}</span></a></li>
 			@endforeach
 		</ul>
 		<br/>
-		  <div class="thumbnail">
-			<img src="themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera"/>
-			<div class="caption">
-			  <h5>Panasonic</h5>
-				<h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-			</div>
-		  </div><br/>
-			<div class="thumbnail">
-				<img src="themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-				<div class="caption">
-				  <h5>Kindle</h5>
-				    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-				</div>
-			  </div><br/>
-			<div class="thumbnail">
-				<img src="themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-				<div class="caption">
-				  <h5>Payment Methods</h5>
-				</div>
-			  </div>
+	  @include('includes.sidebar')
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">	
 		  <div class="d-flex">
-		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/region_products') }}/{{ $university->region_id }}/1">{{ $university->region->name }}</a><a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class=" text-arial">\</a>
-		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/university_products') }}/{{ $university->id }}/1">{{ $university->name }}</a>	
+		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/region_products') }}/{{ $university->region_id }}/latest">{{ $university->region->name }}</a><a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class=" text-arial">\</a>
+		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/university_products') }}/{{ $university->id }}/latest">{{ $university->name }}</a>	
 		  </div>
 
 	<div class="region-categories-div">
 		<h4 class="text-orange text-arial">
 		{{ $cat->name }} Category Items
 		</h4>
-	</div>
+	</div> 
 
 		<div id="products_filtering" style="padding: 2px 5px;" class="row">
-	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->id }}/1" class="btn btn-outline-secondary">Latest @if($order_type == 1) <span class="badge">{{ count($products) }}</span> @endif</a>
-	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->id }}/2" class="btn btn-outline-secondary">cheap first
-           @if($order_type == 2) <span class="badge">{{ count($products) }}</span> @endif
+	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->slug }}/latest" class="btn btn-outline-secondary">Latest @if($order_type == "latest") <span class="badge">{{ count($products) }}</span> @endif</a>
+	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->slug }}/cheap-first" class="btn btn-outline-secondary">cheap first
+           @if($order_type == "cheap-first") <span class="badge">{{ count($products) }}</span> @endif
 	      </a>	
-	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->id }}/3" class="btn btn-outline-secondary">expensive first
-	      	@if($order_type == 3) <span class="badge">{{ count($products) }}</span> @endif
+	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->slug }}/expensive-first" class="btn btn-outline-secondary">expensive first
+	      	@if($order_type == "expensive-first") <span class="badge">{{ count($products) }}</span> @endif
 	      </a>
-	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->id }}/4" class="btn btn-outline-secondary">used only
-          @if($order_type == 4) <span class="badge">{{ count($products) }}</span> @endif
+	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->slug }}/used-only" class="btn btn-outline-secondary">used only
+          @if($order_type == "used-only") <span class="badge">{{ count($products) }}</span> @endif
 	      </a>	
-	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->id }}/5" class="btn btn-outline-secondary">new only
-           @if($order_type == 5) <span class="badge">{{ count($products) }}</span> @endif
+	      <a href="{{ url('/university_categories') }}/{{ $university->id }}/{{ $cat->slug }}/new-only" class="btn btn-outline-secondary">new only
+           @if($order_type == "new-only") <span class="badge">{{ count($products) }}</span> @endif
 	      </a>	
 		</div>
 		<div id="latest-products-row" class="row" style="display: flex;flex-wrap: wrap !important;">
 		
 	  @if(count($products))
-	    @if($order_type == 1)
+	    @if($order_type == "latest")
 	           @foreach($products as $product)
 	            @if(count($product->photo))
-				<div id="col">
-					    
-						  <div class="thumbnail">
-						  	<div class="thumbnail-header">
-						  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-						  	</div>
-						  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-							<div class="caption">
-							  <h5 class="text-arial">{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
-							  <p> 
-								{{  Str::limit($product->product_description,60) }}
-							  </p>
-							  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-							</div>
-						</a>
-						  </div>
-						 
-				</div>
+			<div id="col">
+							  <div class="thumbnail">
+							  	<div class="thumbnail-header">
+							  		<a href="{{ route('item_preview',[1,$product->slug]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
+							  	</div>
+							  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->slug]) }}">
+								<div class="caption">
+								  <h5 class="text-times">{{ Str::limit($product->product_name,26) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+								  <p> 
+									{{  Str::limit($product->product_description,60) }}
+								  </p>
+								  <div id="productFooter">
+									  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+										 <div class="btn-group">
+								          <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+								          <button class="btn"><span class="text-orange">Tsh</span></button>
+								         </div>
+								  </div>
+								</div>
+							    </a>
+							  </div>
+							 
+					</div>
 				@endif
 			   @endforeach
-		    @elseif($order_type == 2)
+		    @elseif($order_type == "cheap-first")
 	           @foreach($products as $product)
 	            @if(count($product->photo))
-				<div id="col">
-					    
-						  <div class="thumbnail">
-						  	<div class="thumbnail-header">
-						  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-						  	</div>
-						  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-							<div class="caption">
-							  <h5>{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">used</span> @endif</h5>
-							  <p> 
-								{{  Str::limit($product->product_description,60) }}
-							  </p>
-							  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-							</div>
-						</a>
-						  </div>
-						 
-				</div>
-				@endif
-			   @endforeach
-
-		    @elseif($order_type == 3)
-	           @foreach($products as $product)
-	            @if(count($product->photo))
-				<div id="col">
-					    
-						  <div class="thumbnail">
-						  	<div class="thumbnail-header">
-						  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-						  	</div>
-						  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-							<div class="caption">
-							  <h5>{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">used</span> @endif</h5>
-							  <p> 
-								{{  Str::limit($product->product_description,60) }}
-							  </p>
-							  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-							</div>
-						</a>
-						  </div>
-						 
-				</div>
+			<div id="col">
+							  <div class="thumbnail">
+							  	<div class="thumbnail-header">
+							  		<a href="{{ route('item_preview',[1,$product->slug]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
+							  	</div>
+							  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->slug]) }}">
+								<div class="caption">
+								  <h5 class="text-times">{{ Str::limit($product->product_name,26) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+								  <p> 
+									{{  Str::limit($product->product_description,60) }}
+								  </p>
+								  <div id="productFooter">
+									  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+										 <div class="btn-group">
+								          <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+								          <button class="btn"><span class="text-orange">Tsh</span></button>
+								         </div>
+								  </div>
+								</div>
+							    </a>
+							  </div>
+							 
+					</div>
 				@endif
 			   @endforeach
 
-		    @elseif($order_type == 4)
+		    @elseif($order_type == "expensive-first")
 	           @foreach($products as $product)
 	            @if(count($product->photo))
-				<div id="col">
-					    
-						  <div class="thumbnail">
-						  	<div class="thumbnail-header">
-						  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-						  	</div>
-						  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-							<div class="caption">
-							  <h5>{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">used</span> @endif</h5>
-							  <p> 
-								{{  Str::limit($product->product_description,60) }}
-							  </p>
-							  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-							</div>
-						</a>
-						  </div>
-						 
-				</div>
+			<div id="col">
+							  <div class="thumbnail">
+							  	<div class="thumbnail-header">
+							  		<a href="{{ route('item_preview',[1,$product->slug]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
+							  	</div>
+							  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->slug]) }}">
+								<div class="caption">
+								  <h5 class="text-times">{{ Str::limit($product->product_name,26) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+								  <p> 
+									{{  Str::limit($product->product_description,60) }}
+								  </p>
+								  <div id="productFooter">
+									  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+										 <div class="btn-group">
+								          <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+								          <button class="btn"><span class="text-orange">Tsh</span></button>
+								         </div>
+								  </div>
+								</div>
+							    </a>
+							  </div>
+							 
+					</div>
 				@endif
 			   @endforeach
-		   @elseif($order_type == 5)
+
+		    @elseif($order_type == "used-only")
 	           @foreach($products as $product)
 	            @if(count($product->photo))
-				<div id="col">
-					    
-						  <div class="thumbnail">
-						  	<div class="thumbnail-header">
-						  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-						  	</div>
-						  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-							<div class="caption">
-							  <h5>{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">used</span> @endif</h5>
-							  <p> 
-								{{  Str::limit($product->product_description,60) }}
-							  </p>
-							  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-							</div>
-						</a>
-						  </div>
-						 
-				</div>
+			<div id="col">
+							  <div class="thumbnail">
+							  	<div class="thumbnail-header">
+							  		<a href="{{ route('item_preview',[1,$product->slug]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
+							  	</div>
+							  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->slug]) }}">
+								<div class="caption">
+								  <h5 class="text-times">{{ Str::limit($product->product_name,26) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+								  <p> 
+									{{  Str::limit($product->product_description,60) }}
+								  </p>
+								  <div id="productFooter">
+									  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+										 <div class="btn-group">
+								          <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+								          <button class="btn"><span class="text-orange">Tsh</span></button>
+								         </div>
+								  </div>
+								</div>
+							    </a>
+							  </div>
+							 
+					</div>
+				@endif
+			   @endforeach
+		   @elseif($order_type == "new-only")
+	           @foreach($products as $product)
+	            @if(count($product->photo))
+			<div id="col">
+							  <div class="thumbnail">
+							  	<div class="thumbnail-header">
+							  		<a href="{{ route('item_preview',[1,$product->slug]) }}"><img src="{{ asset('images') }}/{{ $product->photo[0]->name }}"></a>
+							  	</div>
+							  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->slug]) }}">
+								<div class="caption">
+								  <h5 class="text-times">{{ Str::limit($product->product_name,26) }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+								  <p> 
+									{{  Str::limit($product->product_description,60) }}
+								  </p>
+								  <div id="productFooter">
+									  <h5>From: <span class="text-orange">{{ Str::limit($product->university->name,20) }}</span></h5>
+										 <div class="btn-group">
+								          <button class="btn btn-primary">{{ number_format($product->product_price) }}</button>
+								          <button class="btn"><span class="text-orange">Tsh</span></button>
+								         </div>
+								  </div>
+								</div>
+							    </a>
+							  </div>
+							 
+					</div>
 				@endif
 			   @endforeach
           @endif

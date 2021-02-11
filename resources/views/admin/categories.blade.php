@@ -44,7 +44,7 @@
                             <span>{{ session('category_updated') }}</span>
                             </div>
                         </div>
-                        </div>
+                        </div>  
                         @endif
 
                         @if(session()->has('category_added'))

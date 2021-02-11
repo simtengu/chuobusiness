@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$("#document-loader-div").hide();
 	$("#document-loader-div").click(function(){
 		$(this).hide();
-	});
+	}); 
 		
 	$('.subMenu > a').click(function(e)
 	{
@@ -208,7 +208,7 @@ $("#regions_products").change(function(){
    var region_id = $(this).val();
    var path = $("#regions_path").val();
    if (region_id != "") {
-    window.location.href= path+"/"+region_id+"/1";
+    window.location.href= path+"/"+region_id+"/latest";
    }
 });
 
@@ -216,7 +216,7 @@ $("#regions_items").change(function(){
    var region_id = $(this).val();
    var path = $("#regions_path").val();
    if (region_id != "") {
-    window.location.href= path+"/"+region_id+"/1";
+    window.location.href= path+"/"+region_id+"/latest";
    }
 });
 
@@ -238,7 +238,7 @@ $("#top_universities").change(function(){
     var university_id = $(this).val();
     var path = $("#university_path").val();
    if (university_id != "") {
-    window.location.href= path+"/"+university_id+"/1";
+    window.location.href= path+"/"+university_id+"/latest";
    }
 });
   $("#topUniversitiesForm").submit(function(e){
@@ -296,7 +296,7 @@ $(".c-search-field").focus(function(){
   	$(".c-search-form input[type='text']").val("").focus();
   	 $("#c-search-suggestions").html("");
   }); 
-});
+}); 
 // search forms validation and normal submittion............................
 $(".a-search-form").submit(function(e){
  var item = $(".a-search-form input[type='text']").val();

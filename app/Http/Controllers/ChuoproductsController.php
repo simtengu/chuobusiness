@@ -117,9 +117,9 @@ class ChuoproductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-       $product = Chuoproduct::findOrFail($id);
+       $product = Chuoproduct::where('slug',$slug)->first();
        $cat = new UsersController();
        $categories = $cat->userCategories();
        $cat_count = $categories->count();
@@ -135,9 +135,9 @@ class ChuoproductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-       $product = Chuoproduct::findOrFail($id);
+       $product = Chuoproduct::where('slug',$slug)->first();
        $cats = ChuoproductType::pluck('name','id')->all();
        $brands = Brand::pluck('name','id')->all();
        $os = Os::pluck('name','id')->all();
@@ -159,11 +159,12 @@ class ChuoproductsController extends Controller
     public function update(Request $request, $id)
     {   
         $product = Chuoproduct::findOrFail($id);
+        $product->slug = null;
         $data = $request->except('form_id');
         if (Auth::user()->isAdmin()) {
           $product->update($data);
           session()->flash("updated","Product successful updated");
-          return redirect()->route('chuoproduct.show',$id);        
+          return redirect()->route('chuoproduct.show',$product->slug);        
 
         }
 
@@ -179,6 +180,14 @@ class ChuoproductsController extends Controller
     {   
       
             Chuoproduct::findOrFail($id)->delete();
+              $images =  Image::where('chuoproduct_id',$id)->get();
+               foreach($images as $image){
+                $pic_name = $image->name;
+                 if (File::exists(public_path('/pictures').'/'.$pic_name)) {
+                   File::delete(public_path('/pictures').'/'.$pic_name);
+                 }
+                 $image->delete();
+               } 
             session()->flash("product_deleted","Product successful deleted");
             return redirect()->route('chuoproduct.index');
 

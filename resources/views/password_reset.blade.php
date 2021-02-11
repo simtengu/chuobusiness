@@ -1,0 +1,1 @@
+<h5 style="color: black; margin-bottom: 2px;">Your password reset code is: {{ $data }}</h5>

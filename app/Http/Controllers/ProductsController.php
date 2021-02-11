@@ -82,6 +82,7 @@ class ProductsController extends Controller
         $product->brand_id = $data->get('brand_id');
         $product->period_value = $data->get('period_value');
         $product->period_id = $data->get('period_id');
+        $product->street_name = $data->get('street_name');
        $product->save();
         $photos = Photo::where('product_id','=',$data->get('form_id'))->get();
         foreach ($photos as $photo) {
@@ -98,9 +99,9 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-      $product = Product::findOrFail($id);
+      $product = Product::where('slug',$slug)->first();
       if (Auth::user()->id == $product->user_id) {
          $cat = new UsersController();
          $categories = $cat->userCategories();
@@ -108,18 +109,18 @@ class ProductsController extends Controller
          return view('products.show',compact('product','categories','cat_count'));       
 
       }else{
-        return redirect()->back();
+         return redirect()->back();
       }
 
     }
 
-   public function item_preview($type,$id){
+   public function item_preview($type,$slug){
         $universities = $this->topUniversities();
         $regions = $this->regions();
    if ($type == 1) {
-         $product = Product::findOrFail($id);
+         $product = Product::where('slug',$slug)->first();
          $product_region = $product->university->region_id;
-         $more_related_items = Product::where('id','!=',$id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
+         $more_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
 
          $less_related_items = Product::where('university_id','!=',$product->university_id)
                                  ->where('category_id',$product->category_id)
@@ -127,7 +128,7 @@ class ProductsController extends Controller
                                  $q->where('region_id',$product_region);
                                  })
                                  ->orderBy('brand_id','asc')->get();
-         $less_related_items1 = Product::where('category_id',$product->category_id)
+         $less_related_items1  = Product::where('category_id',$product->category_id)
                                  ->whereHas('university', function($q) use ($product_region) {
                                  $q->where('region_id','!=',$product_region);
                                  })
@@ -139,8 +140,8 @@ class ProductsController extends Controller
 
    }elseif ($type==2) {
    
-         $product = Chuoproduct::findOrFail($id);
-         $chuoproducts = Chuoproduct::where('id','!=',$id)->where('chuoproductType_id',$product->chuoproductType_id)->get();
+         $product = Chuoproduct::where('slug',$slug)->first();
+         $chuoproducts = Chuoproduct::where('id','!=',$product->id)->where('chuoproductType_id',$product->chuoproductType_id)->get();
          $products = Product::where('category_id',$product->chuoproductType_id)->paginate(32);
      return view('products.item_show',compact('product','type','universities','regions','chuoproducts','products'));
  
@@ -156,9 +157,9 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-     $product = Product::findOrFail($id);
+     $product = Product::where('slug',$slug)->first();
       if (Auth::user()->id == $product->user_id) {
        $cats = Category::pluck('name','id')->all();
        $brands = Brand::pluck('name','id')->all();
@@ -185,6 +186,7 @@ class ProductsController extends Controller
     {
  
         $product = Product::findOrFail($id);
+        $product->slug = null;
       if (Auth::user()->id == $product->user_id) {
         $user = Auth::user();
         $product->product_name = $data->get('product_name');
@@ -194,9 +196,9 @@ class ProductsController extends Controller
         $product->brand_id = $data->get('brand_id');
         $product->period_value = $data->get('period_value');
         $product->period_id = $data->get('period_id');
-        $product->update();
+        $product->save();
         session()->flash("updated","Product successful updated");
-        return redirect()->route('product.show',$id);    
+        return redirect()->route('product.show',$product->slug);    
 
       }else{
         return redirect()->back();
@@ -215,6 +217,14 @@ class ProductsController extends Controller
        $product =  Product::findOrFail($id);
      if (Auth::user()->id == $product->user_id) {
         $product->delete();
+              $images =  Photo::where('product_id',$id)->get();
+               foreach($images as $image){
+                $pic_name = $image->name;
+                 if (File::exists(public_path('/images').'/'.$pic_name)) {
+                   File::delete(public_path('/images').'/'.$pic_name);
+                 }
+                 $image->delete();
+               } 
         session()->flash("product_deleted","Product successful deleted");
         return redirect()->route('user.index');
      }else{
@@ -319,7 +329,7 @@ class ProductsController extends Controller
               $photo->delete();
                return redirect()->back();
              }
-
+ 
 
             //product image delete by ajax...........................................
              public function delete_image_ajax($id){
@@ -447,20 +457,23 @@ class ProductsController extends Controller
         $universities = $this->topUniversities();
         $regions = $this->regions();
         $categories = Category::all();
+        foreach($categories as $category){
+          $category->total = Product::where('category_id',$category->id)->get()->count();
+        }
         switch ($order_type) {
-          case 1:
+          case "latest":
              $products = Product::orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
              $products = Product::orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
              $products = Product::orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
              $products = Product::where('period_id','!=',null)->orWhere('period_value','!=',null)->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
              $products = Product::where('period_id','=',null)->orWhere('period_value','=',null)->simplePaginate(28);
             break;
 
@@ -472,47 +485,60 @@ class ProductsController extends Controller
       }
 
 //ordering category products   nationalwise....................................................................
-      public function category_order_type($category,$order_type){
+      public function category_order_type($category_slug,$order_type){
          $categories = Category::all();
+          foreach ($categories as $category) {
+               $count = Product::where('category_id',$category->id)->get()->count();
+               $category->total = $count;
+          }
          $universities = $this->topUniversities();
          $regions = $this->regions();
-         $category_id = $category;
         switch ($order_type) {
-          case 1:
-          //latest products.......
-             $products = Product::where('category_id',$category_id)->orderBy('id','desc')->simplePaginate(28);
+          case "latest":
+          //latest products....... 
+             $products = Product::whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
            //cheap first........
-             $products = Product::where('category_id',$category_id)->orderBy('product_price','asc')->simplePaginate(28);
+             $products = Product::whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
            //expensive first..............
-             $products = Product::where('category_id',$category_id)->orderBy('product_price','desc')->simplePaginate(28);
+             $products = Product::whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
           //used only...................
-             $products = Product::where('category_id',$category_id)->where(function($q){
+             $products = Product::whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->where(function($q){
                $q->where('period_id','!=',null)->orWhere('period_value','!=',null);
              })->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
           //brand new first..................................
-             $products = Product::where('category_id',$category_id)->where(function($q){
+             $products = Product::whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->where(function($q){
                $q->where('period_id',null)->orWhere('period_value',null);
              })->simplePaginate(28);
             break;
 
           default:
             break;
-        }
+        } 
 
-         return view('products.category_products',compact('order_type','products','category_id','categories','universities','regions'));
+         return view('products.category_products',compact('order_type','products','category_slug','categories','universities','regions'));
       }
 
 //region products................................................................................
       public function regionProducts(Request $data){
-        $order_type = 1;
+        $order_type = "latest";
         $region_id = $data->region_id;
         $region_universities = Product::selectRaw('count(university_id) as uv_count,university_id')->whereHas('university', function($q) use ($region_id){
            $q->where('region_id',$region_id);
@@ -520,17 +546,13 @@ class ProductsController extends Controller
         $region = Region::findOrFail($region_id);
         $universities = $this->topUniversities();
         $regions = $this->regions();
-        $categories = Category::whereHas('product', function($query) use ($region_id) {
-            $query->whereHas('university', function($query) use ($region_id) {
-             $query->where('region_id',$region_id);
-            });
-        })->get();
-        foreach ($categories as $category) {
-          $category->total = Product::where('category_id',$category->id)->whereHas('university', function($q) use ($region_id) {
+
+         $categories = Category::all();
+          foreach ($categories as $category) {
+               $category->total =  Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
             $q->where('region_id',$region_id);
           })->count();
-
-        }
+          }
 
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
@@ -547,37 +569,32 @@ class ProductsController extends Controller
            $q->where('region_id',$region_id);
         })->groupBy('university_id')->orderBy('uv_count')->get();
         $region = Region::findOrFail($region_id);
-        $categories = Category::whereHas('product', function($query) use ($region_id) {
-            $query->whereHas('university', function($query) use ($region_id) {
-             $query->where('region_id',$region_id);
-            });
-        })->get();
-        foreach ($categories as $category) {
-          $category->total = Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
+         $categories = Category::all();
+          foreach ($categories as $category) {
+               $category->total =  Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
             $q->where('region_id',$region_id);
           })->count();
-
-        }
+          }
 
         switch ($order_type) {
-          case 1:
+          case "latest":
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
              })->orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
           //cheap first................
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
              })->orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
           //expensive first.............
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
              })->orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
           //used only...............
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
@@ -585,7 +602,7 @@ class ProductsController extends Controller
               $query->where('period_id','!=',null)->orWhere('period_value','!=',null);
              })->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
              })->where(function($query) {
@@ -600,54 +617,59 @@ class ProductsController extends Controller
       }
 
 //region products................................................................................
-      public function region_categories($region_id,$category_id,$order_type){
+      public function region_categories($region_id,$category_slug,$order_type){
         $universities = $this->topUniversities();
         $regions = $this->regions();
         $region = Region::findOrFail($region_id);
-        $cat = Category::findOrFail($category_id);
-        $categories = Category::whereHas('product', function($query) use ($region_id) {
-            $query->whereHas('university', function($query) use ($region_id) {
-             $query->where('region_id',$region_id);
-            });
-        })->get();
-        foreach ($categories as $category) {
-          $category->total = Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
+        $cat = Category::where('slug',$category_slug)->first();
+         $categories = Category::all();
+          foreach ($categories as $category) {
+               $category->total =  Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
             $q->where('region_id',$region_id);
           })->count();
-
-        }
+          }
 
         switch ($order_type) {
-          case 1:
+          case "latest":
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->orderBy('id','desc')->simplePaginate(28);
+             })->whereHas('category', function($q) use ($category_slug) {
+               $q->where('slug',$category_slug); 
+             })->orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
           //cheap first................
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->orderBy('product_price','asc')->simplePaginate(28);
+             })->whereHas('category', function($q) use ($category_slug) {
+               $q->where('slug',$category_slug); 
+             })->orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
           //expensive first.............
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->orderBy('product_price','desc')->simplePaginate(28);
+             })->whereHas('category', function($q) use ($category_slug) {
+               $q->where('slug',$category_slug); 
+             })->orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
           //used only...............
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->where( function($query) {
+             })->whereHas('category', function($q) use ($category_slug) {
+               $q->where('slug',$category_slug); 
+             })->where( function($query) {
               $query->where('period_id','!=',null)->orWhere('period_value','!=',null);
              })->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
           //new only..............
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->where(function($query) {
+             })->whereHas('category', function($q) use ($category_slug) {
+               $q->where('slug',$category_slug); 
+             })->where(function($query) {
               $query->where('period_id',null)->orWhere('period_value',null);
              })->simplePaginate(28);
             break;
@@ -655,7 +677,7 @@ class ProductsController extends Controller
           default:
             break;
         }
-       return view('products.region_categories',compact('products','categories','region','order_type','region_id','category_id','cat','universities','regions'));
+       return view('products.region_categories',compact('products','categories','region','order_type','region_id','category_slug','cat','universities','regions'));
       }
 
 
@@ -664,25 +686,22 @@ class ProductsController extends Controller
         $regions = $this->regions();
           $region_id = $data->region_id;
           $order_type = $data->order_type;
-          $category_id = $data->r_categories;
+          $category_slug = $data->r_categories;
           $region = Region::findOrFail($region_id);
-          $cat = Category::findOrFail($category_id);
-        $categories = Category::whereHas('product', function($query) use ($region_id) {
-            $query->whereHas('university', function($query) use ($region_id) {
-             $query->where('region_id',$region_id);
-            });
-        })->get();
-        foreach ($categories as $category) {
-          $category->total = Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
+          $cat = Category::where('slug',$category_slug)->first();
+         $categories = Category::all();
+          foreach ($categories as $category) {
+               $category->total =  Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
             $q->where('region_id',$region_id);
           })->count();
-
-        }
+          }
              $products = Product::whereHas('university', function($query) use ($region_id) {
                 $query->where('region_id',$region_id);
-             })->where('category_id',$category_id)->orderBy('id','desc')->simplePaginate(28);
+             })->whereHas('category',function($q) use ($category_slug) {
+                $q->where('slug',$category_slug);
+             })->orderBy('id','desc')->simplePaginate(28);
      
-       return view('products.region_categories',compact('products','categories','region','order_type','region_id','category_id','cat','universities','regions'));
+       return view('products.region_categories',compact('products','categories','region','order_type','region_id','category_slug','cat','universities','regions'));
       }
 
 //ordering  products   collegewise....................................................................
@@ -690,36 +709,33 @@ class ProductsController extends Controller
         $universities = $this->topUniversities();
         $regions = $this->regions();
         $university = University::findOrFail($university_id);
-        $categories = Category::whereHas('product', function($query) use ($university_id) {
-               $query->where('university_id',$university_id);
-        })->get(); 
-
+         $categories = Category::all();
         foreach ($categories as $category) {
           $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
 
         }
-
+ 
         switch ($order_type) {
-          case 1:
+          case "latest":
           //latest items...........
              $products = Product::where('university_id',$university_id)->orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
           //cheap first...........
              $products = Product::where('university_id',$university_id)->orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
           //expensive first........
              $products = Product::where('university_id',$university_id)->orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
           //used only .................
              $products = Product::where('university_id',$university_id)->where(function($query){
               $query->where('period_id','!=',null)->orWhere('period_value','!=',null);
 
              })->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
           //brand new only................
             $products = Product::where('university_id',$university_id)->where(function($query){
               $query->where('period_id',null)->orWhere('period_value',null);
@@ -738,14 +754,12 @@ class ProductsController extends Controller
         $universities = $this->topUniversities();
         $regions = $this->regions();
         $university_id = $data->top_universities;
-        $order_type = 1; 
+        $order_type = "latest"; 
         $university = University::findOrFail($university_id);
-        $categories = Category::whereHas('product', function($query) use ($university_id) {
-               $query->where('university_id',$university_id);
-        })->get(); 
-
+          $categories = Category::all();
         foreach ($categories as $category) {
           $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
+
         }
 
        $products = Product::where('university_id',$university_id)->orderBy('id','desc')->simplePaginate(28); 
@@ -755,39 +769,47 @@ class ProductsController extends Controller
       }
 
       //university category products................
-      public function university_category_products($university_id,$category_id,$order_type){
+      public function university_category_products($university_id,$category_slug,$order_type){
           $universities = $this->topUniversities();
           $regions = $this->regions();
           $university = University::findOrFail($university_id);
-          $cat = Category::findOrFail($category_id);
-          $categories = Category::whereHas('product', function($query) use ($university_id) {
-             $query->where('university_id',$university_id);
-          })->get();
-          foreach ($categories as $category) {
-           $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
-          } 
+          $cat = Category::where('slug',$category_slug)->first();
+         $categories = Category::all();
+        foreach ($categories as $category) {
+          $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
+        }
         switch ($order_type) {
-          case 1:
+          case "latest":
           //latest.............................................
-             $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->orderBy('id','desc')->simplePaginate(28);
+             $products = Product::where('university_id',$university_id)->whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('id','desc')->simplePaginate(28);
             break;
-          case 2:
+          case "cheap-first":
           //cheap first................
-             $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->orderBy('product_price','asc')->simplePaginate(28);
+             $products = Product::where('university_id',$university_id)->whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('product_price','asc')->simplePaginate(28);
             break;
-          case 3:
+          case "expensive-first":
           //expensive first.............
-             $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->orderBy('product_price','desc')->simplePaginate(28);
+             $products = Product::where('university_id',$university_id)->whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->orderBy('product_price','desc')->simplePaginate(28);
             break;
-          case 4:
+          case "used-only":
           //used only...............
-             $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->where( function($query) {
+             $products = Product::where('university_id',$university_id)->whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->where( function($query) {
               $query->where('period_id','!=',null)->orWhere('period_value','!=',null);
              })->simplePaginate(28);
             break;
-          case 5:
+          case "new-only":
           //new only..............
-             $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->where(function($query) {
+             $products = Product::where('university_id',$university_id)->whereHas('category',function($q) use($category_slug){
+                $q->where('slug',$category_slug);
+             })->where(function($query) {
               $query->where('period_id',null)->orWhere('period_value',null);
              })->simplePaginate(28);
             break;
@@ -803,18 +825,19 @@ class ProductsController extends Controller
           $universities = $this->topUniversities();
           $regions = $this->regions();
           $university_id = $data->university_id;
-          $order_type = 1;
-          $category_id = $data->category_id;
+          $order_type = "latest";
+          $category_slug = $data->category_id;
           $university = University::findOrFail($university_id);
-          $cat = Category::findOrFail($category_id);
-          $categories = Category::whereHas('product', function($query) use ($university_id) {
-             $query->where('university_id',$university_id);
-          })->get();
-          foreach ($categories as $category) {
-           $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
-          }
+          $cat = Category::where('slug',$category_slug)->first();
+         $categories = Category::all();
+        foreach ($categories as $category) {
+          $category->total = Product::where('category_id',$category->id)->where('university_id',$university_id)->count();
 
-          $products = Product::where('university_id',$university_id)->where('category_id',$category_id)->orderBy('id','desc')->simplePaginate(28);
+        }
+
+          $products = Product::where('university_id',$university_id)->whereHas('category', function($q) use($category_slug) {
+            $q->where('slug',$category_slug);
+          })->orderBy('id','desc')->simplePaginate(28);
 
         return view('products.university_categories',compact('products','categories','university','order_type','cat','universities','regions'));
 
@@ -858,13 +881,13 @@ class ProductsController extends Controller
          //iterating through found chuoproducts ................
          if ($chuoproducts_count > 0) {
              foreach ($chuoproducts as $product) {
-              $result .= "<li><a href='".route('region.searched_item',[2,$id,$product->id])."'>".$product->product_name."</a></li>";
+              $result .= "<li><a href='".route('region.searched_item',[2,$id,$product->slug])."'>".$product->product_name."</a></li>";
              }
           }
           //iterating through found normal people products................
          if ($products_count > 0) {
              foreach ($products as $product) {
-              $result .= "<li><a href='".route('region.searched_item',[1,$id,$product->id])."'>".$product->product_name."</a></li>";
+              $result .= "<li><a href='".route('region.searched_item',[1,$id,$product->slug])."'>".$product->product_name."</a></li>";
 
              }
           }
@@ -888,12 +911,12 @@ class ProductsController extends Controller
                     $result = "<ul  class='nav nav-tabs nav-stacked'>";
                      if ($result_count > 0) {
                        foreach ($products as $product) {
-                        $result .= "<li><a href='".route('university.searched_item',[1,$id,$product->id])."'>".$product->product_name."</a></li>";
+                        $result .= "<li><a href='".route('university.searched_item',[1,$id,$product->slug])."'>".$product->product_name."</a></li>";
                        }
                      }
                      if ($chuoproducts_count > 0) {
                          foreach ($chuoproducts as $product) {
-                          $result .= "<li><a href='".route('university.searched_item',[2,$id,$product->id])."'>".$product->product_name."</a></li>";
+                          $result .= "<li><a href='".route('university.searched_item',[2,$id,$product->slug])."'>".$product->product_name."</a></li>";
                          }
                        
                      }
@@ -913,16 +936,16 @@ class ProductsController extends Controller
            # code...
            break;
        }
-
+ 
       }
 //nation item search results.......................................................
-      public function nation_search_results($order,$product_id){
+      public function nation_search_results($order,$product_slug){
           $universities = $this->topUniversities();
           $regions = $this->regions(); 
           $level = "nationLevel";
           switch ($order) {
             case 1:
-                $product = Product::findOrFail($product_id);
+                $product = Product::where('slug',$product_slug)->first();
                 $more_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->orderBy('brand_id','asc')->paginate(24);
                 $more_related_count = $more_related_items->count();
               if ($product->category_id == 1 || $product->category_id == 2) {
@@ -936,8 +959,8 @@ class ProductsController extends Controller
               break;
 
             case 2:
-              $chuoproduct = Chuoproduct::findOrFail($product_id);
-              $more_related_items = Chuoproduct::where('id','!=', $product_id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->orderBy('brand_id','asc')->paginate(10);
+              $chuoproduct = Chuoproduct::where('slug',$product_slug)->first();
+              $more_related_items = Chuoproduct::where('id','!=', $chuoproduct->id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->orderBy('brand_id','asc')->paginate(10);
               $more_related_count = $more_related_items->count();
               $related_normal_products = Product::where('category_id',$chuoproduct->chuoproductType_id)->limit(17)->orderBy('brand_id','asc')->get();
 
@@ -953,16 +976,16 @@ class ProductsController extends Controller
       }
 
 //region item search results..................................................
-      public function region_search_results($order,$region_id,$product_id){
+      public function region_search_results($order,$region_id,$product_slug){
           $universities = $this->topUniversities();
           $regions = $this->regions();
        switch ($order) {
          case 1:
-         $product = Product::findOrFail($product_id);
+         $product = Product::where('slug',$product_slug)->first();
          // $product_region = $product->university->region_id;
-         $more_related_items = Product::where('id','!=',$product_id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
+         $more_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
 
-         $less_related_items = Product::where('id','!=',$product_id)->where('category_id',$product->category_id)->where('university_id','!=',$product->university_id)->whereHas('university', function($q) use ($region_id) {
+         $less_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->where('university_id','!=',$product->university_id)->whereHas('university', function($q) use ($region_id) {
             $q->where('region_id',$region_id);
          })->orderBy('brand_id','asc')->get();
          //checking if product category matches with any of chuobusiness categories....(1or2)
@@ -980,8 +1003,8 @@ class ProductsController extends Controller
 
            break;
          case 2:
-           $chuoproduct = Chuoproduct::findOrFail($product_id);
-           $more_chuoproducts = Chuoproduct::where('id','!=',$product_id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->limit(4)->orderBy('brand_id','asc')->get();
+           $chuoproduct = Chuoproduct::where('slug',$product_slug)->first();
+           $more_chuoproducts = Chuoproduct::where('id','!=',$chuoproduct->id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->limit(4)->orderBy('brand_id','asc')->get();
 
             $related_products = Product::where('category_id',$chuoproduct->chuoproductType_id)->whereHas('university', function($q) use($region_id) {
                $q->where('region_id',$region_id);
@@ -997,16 +1020,16 @@ class ProductsController extends Controller
 
       }
 //university item search results.......................................................
-      public function university_search_results($order,$location_id,$product_id){
+      public function university_search_results($order,$location_id,$product_slug){
           $universities = $this->topUniversities();
           $regions = $this->regions();
        switch ($order) {
          case 1:
-         $product = Product::findOrFail($product_id);
+           $product = Product::where('slug',$product_slug)->first();
          $region_id = $product->university->region_id;
-         $more_related_items = Product::where('id','!=',$product_id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
+         $more_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->where('university_id',$product->university_id)->orderBy('brand_id','asc')->get();
 
-         $less_related_items = Product::where('id','!=',$product_id)->where('category_id',$product->category_id)->where('university_id','!=',$product->university_id)->whereHas('university', function($q) use ($region_id) {
+         $less_related_items = Product::where('id','!=',$product->id)->where('category_id',$product->category_id)->where('university_id','!=',$product->university_id)->whereHas('university', function($q) use ($region_id) {
             $q->where('region_id',$region_id);
          })->orderBy('brand_id','asc')->get();
          //checking if product category matches with any of chuobusiness categories....(1or2)
@@ -1026,8 +1049,8 @@ class ProductsController extends Controller
          case 2:
          $uv = University::findOrFail($location_id);
          $region_id = $uv->region_id;
-           $chuoproduct = Chuoproduct::findOrFail($product_id);
-           $more_chuoproducts = Chuoproduct::where('id','!=',$product_id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->limit(4)->orderBy('brand_id','asc')->get();
+           $chuoproduct = Chuoproduct::where('slug',$product_slug)->first();
+           $more_chuoproducts = Chuoproduct::where('id','!=',$chuoproduct->id)->where('chuoproductType_id',$chuoproduct->chuoproductType_id)->limit(4)->orderBy('brand_id','asc')->get();
 
             $more_related_items = Product::where('category_id',$chuoproduct->chuoproductType_id)->where('university_id',$location_id)->orderBy('brand_id','asc')->get();
 
@@ -1046,7 +1069,7 @@ class ProductsController extends Controller
 
       }
 
-   //seach engine requests handling method...................
+   //seach engine requests handling method(ajax)...................
       public function product_search($level,$key){
        switch ($level) {
          case 'nationLevel':
@@ -1060,13 +1083,13 @@ class ProductsController extends Controller
          //iterating through found chuoproducts ................
          if ($chuoproducts_count > 0) {
              foreach ($chuoproducts as $product) {
-              $result .= "<li><a href='".route('nationwise.searched_item',[2,$product->id])."'>".$product->product_name."</a></li>";
+              $result .= "<li><a href='".route('nationwise.searched_item',[2,$product->slug])."'>".$product->product_name."</a></li>";
              }
           }
           //iterating through found normal people products................
          if ($products_count > 0) {
              foreach ($products as $product) {
-              $result .= "<li><a href='".route('nationwise.searched_item',[1,$product->id])."'>".$product->product_name."</a></li>";
+              $result .= "<li><a href='".route('nationwise.searched_item',[1,$product->slug])."'>".$product->product_name."</a></li>";
 
              }
           }
@@ -1087,7 +1110,7 @@ class ProductsController extends Controller
                   if ($result_count > 0) {
                     $result = "<ul  class='nav nav-tabs nav-stacked'>";
                      foreach ($universities as $product) {
-                      $result .= "<li><a href='".route('university_products',[$product->id,1])."'>".$product->name."</a></li>";
+                      $result .= "<li><a href='".route('university_products',[$product->id,'latest'])."'>".$product->name."</a></li>";
                      }
                       $result .= "</ul>";
                       return $result;
@@ -1164,10 +1187,24 @@ class ProductsController extends Controller
            break;
        }
 
-
-
-
       }
 
+
+  public function customer_premium_products(){
+
+        $universities = $this->topUniversities();
+        $regions = $this->regions();
+        $products = Product::where('premium',1)->simplePaginate(15);
+        return view('products.customer_premium_products',compact('products','universities','regions'));
+
+  }
+
+  public function chuobusinessProducts(){
+        $universities = $this->topUniversities();
+        $regions = $this->regions();
+        $laptops = Chuoproduct::where('chuoproductType_id',2)->orderBy('brand_id','asc')->get();
+        $phones = Chuoproduct::where('chuoproductType_id',1)->orderBy('brand_id','asc')->get();
+        return view('products.chuoproducts_view',compact('universities','regions','laptops','phones'));
+  }
 
 }

@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Brand;
-use App\Category;
 use App\Log;
 use App\Role;
 use App\User;
+use App\Brand;
+use App\Photo;
 use App\Region;
-use App\University;
 use App\Product;
+use App\Category;
+use App\University;
+use App\PremiumItem;
 use App\Premium_request;
 use Illuminate\Http\Request;
 use App\Http\Requests\Message;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CollegeRequest;
-use App\PremiumItem;
 
 class AdminController extends Controller
 {
     public function __construct(){
-
+      $this->middleware(['auth','super_admin','preventBackHistory'],['except'=>'reportPost']);
     }
-
 
     public function index($range){
     	$users = User::paginate($range);
@@ -109,7 +110,7 @@ class AdminController extends Controller
       if($rows_count == 0){
         DB::insert('insert into reported_posts (product_id) values (?)', [$id]);
       }
-     session()->flash('product_reported', 'A product has been reported successfully...Thank you for reporting');
+     session()->flash('product_reported', 'Product reported...Thank you for reporting');
      return redirect()->back();
    }
 
@@ -126,6 +127,11 @@ class AdminController extends Controller
    public function deleteReportedPost($id){
        DB::delete('delete from reported_posts where product_id = ?', [$id]);
        return redirect()->back();
+   }
+
+   public function checkReportedProduct($product_id){
+      $product = Product::findOrFail($product_id);
+       return view('admin.products.reported_post_delete', compact('product'));
    }
 
    public function deletePremiumLog($id){
@@ -193,6 +199,7 @@ class AdminController extends Controller
 
   public function updateCategory(Request $request, $id){
       $category = Category::findOrFail($id);
+      $category->slug = null;
       $category->name = $request->name;
       $category->save();
       session()->flash('category_updated','A category has been updated');
@@ -231,7 +238,40 @@ class AdminController extends Controller
   }
 
   public function editUniversity($university_id){
-    return "ready to update uv";
+    $university = University::findOrFail($university_id);
+    $regions = Region::orderBy('name')->pluck('name','id')->all();
+    return view('admin.editUniversity',compact('university','regions'));
   }
+
+  public function updateUniversity(Request $request, $id){
+      $university = University::findOrFail($id);
+      $university->update($request->all());
+      session()->flash('university_updated','A university has been updated');
+      return redirect()->back();
+  }
+
+  public function deleteUniversity($uv_id){
+    University::findOrFail($uv_id)->delete();
+    session()->flash('university_deleted','One university has been deleted');
+    return redirect()->route('admin.viewUniversities');
+  }
+
+  public function deleteReportedProduct($product_id){
+       $product =  Product::findOrFail($product_id);
+        $product->delete();
+              $images =  Photo::where('product_id',$product_id)->get();
+               foreach($images as $image){
+                $pic_name = $image->name;
+                 if (File::exists(public_path('/images').'/'.$pic_name)) {
+                   File::delete(public_path('/images').'/'.$pic_name);
+                 }
+                 $image->delete();
+               } 
+
+            DB::delete('delete from reported_posts where product_id = ?', [$product_id]);
+            return redirect()->route('admin.reportedPosts');
+
+  }
+
 
 }

@@ -14,17 +14,6 @@
                         </div>
                         @endif
 
-                        @if(session()->has('university_updated'))
-                        <div class="row">
-                        <div class="col-12 pt-3">
-                            <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <span>{{ session('university_updated') }}</span>
-                            </div>
-                        </div>
-                        </div>
-                        @endif
-
                         @if(session()->has('university_added'))
                         <div class="row">
                         <div class="col-12 pt-3">
@@ -54,7 +43,7 @@
                            {!! Form::text('name', null, ['required'=>'required','class'=>'form-control','placeholder'=>'Enter  University name']) !!}
                         </div>
                        <div class="form-group">
-                           {!! Form::text('aka', null, ['class'=>'form-control','placeholder'=>'Enter university aka University']) !!}
+                           {!! Form::text('aka', null, ['class'=>'form-control','placeholder'=>'Enter university aka']) !!}
                         </div>
                         {!! Form::submit('add',['class'=>'btn btn-primary btn-md']) !!}
 

@@ -25,8 +25,8 @@
        <div class="row">
       @if(count($products))
          @foreach($products as $product)
-         @if(count($product->image))
-         <div class=" col-md-6 col-lg-4 mt-1">
+         @if(count($product->image)) 
+         <div class=" col-sm-6 col-lg-4 mt-1">
            <a class="text-dark" href="{{ route('adminProduct.show',$product->id) }}" id="adminProductLink">
             <div class="media border p-1">
               <img style="width: 45%; height: auto;" src="{{ asset('pictures') }}/{{ $product->image[0]->name }}" alt="John Doe">

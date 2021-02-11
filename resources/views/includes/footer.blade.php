@@ -2,37 +2,33 @@
 	<div  id="footerSection">
 	<div class="container">
 		<div class="row">
+
 			<div class="span3">
-				<h5>ACCOUNT</h5>
-				<a href="login.html">YOUR ACCOUNT</a>
-				<a href="login.html">PERSONAL INFORMATION</a> 
-				<a href="login.html">ADDRESSES</a> 
-				<a href="login.html">DISCOUNT</a>  
-				<a href="login.html">ORDER HISTORY</a>
+				<h5>IMPORTANT PAGES</h5>
+				<a href="{{ route('contact_us') }}">CONTACT US</a>  
+				<a href="{{ url('/user/create') }}">REGISTRATION</a>  
+				<a href="{{ route('customer.premium_products') }}">PREMIUM PRODUCTS</a>  
+				<a href="{{ route('customer.chuobusiness_products') }}">CHUOBUSINESS SHOP</a> 
+				
 			 </div>
 			<div class="span3">
-				<h5>INFORMATION</h5>
-				<a href="contact.html">CONTACT</a>  
-				<a href="register.html">REGISTRATION</a>  
-				<a href="legal_notice.html">LEGAL NOTICE</a>  
-				<a href="tac.html">TERMS AND CONDITIONS</a> 
-				<a href="faq.html">FAQ</a>
+				<h5>OTHER SERVICES</h5>
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">STATIC WEB DEVELOPMENT</p> 
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">DYNAMIC WEB DEVELOPMENT</p>  
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">PRODUCTS ADVERTISEMENT</p> 
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">0710162838,0769873401</p>  
 			 </div>
 			<div class="span3">
-				<h5>OUR OFFERS</h5>
-				<a href="#">NEW PRODUCTS</a> 
-				<a href="#">TOP SELLERS</a>  
-				<a href="special_offer.html">SPECIAL OFFERS</a>  
-				<a href="#">MANUFACTURERS</a> 
-				<a href="#">SUPPLIERS</a> 
-			 </div>
+				<h5>SOME TIPS</h5>
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">Always consider making business with people who are as much close to you as possible e.g from same university or same region for simplicity and safety.</p>
+				<p class="text-arial" style="font-size: 15px; text-transform: lowercase; color: #cccccc">Main task of this system is to connect buyers/any service provider and customers from various universities/colleges in <span style="text-transform: capitalize;">Tanzania</span>,, this system plays no part in business between these two categories of people.</p>
+			 </div> 
 			<div id="socialMedia" class="span3 pull-right">
 				<h5>SOCIAL MEDIA </h5>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
+				<a href="#"></a>
+				<a href="#"></a>
+				<a href="#"></a>
 			 </div> 
 		 </div>
-		<p class="pull-right">&copy; Bootshop</p>
-	</div><!-- Container End -->
+	</div>
 	</div>

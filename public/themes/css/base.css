@@ -4,6 +4,20 @@ body {
   margin: 0px !important;
 }
 
+#fb {
+  width: 24%;
+  margin-right: 6px;
+  border-radius: 4px;
+}
+
+#fb .img-container{
+  max-width: 100%;
+}
+.img-container img{
+  width: 100%;
+  height: auto;
+}
+
 #searchEnginesContainer{
   position: fixed;
   top: 0px;
@@ -14,6 +28,10 @@ body {
   z-index: 120;
   display: none;
 
+}
+
+.bg-light-orange {
+  background-color: #d4d4d4;
 }
 
 #searchEnginesContainer .searchContainer input[name='key'] {
@@ -453,6 +471,9 @@ box-shadow: 2px 2px 4px black;
 /* Large desktop */
 @media (min-width: 1200px) { 
 /*my own css addition...........................*/
+#productFooter {
+   position: absolute;bottom: 0px;left: 20%;
+}
 .regions-select {
   max-width: 182px;
 }
@@ -527,6 +548,12 @@ box-shadow: 2px 2px 4px black;
   width: 48%;
   padding: 2px;
  }
+
+#fb {
+  width: 48%;
+  margin-right: 4px;
+
+}
 
   #col img , .carousel-cell img {
   max-width: 210px;
@@ -762,6 +789,12 @@ display: block;
 
 #searchEnginesContainer .searchContainer input[name='key'] {
            width: 80%;
+}
+
+#fb {
+  width: 90%;
+  margin-right: 4px;
+
 }
 
 

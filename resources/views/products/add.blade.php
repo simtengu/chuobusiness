@@ -40,6 +40,10 @@
                  @endforeach
                </select>
             </div>
+            <div id="street_name_div" style="display: none;" class="form-group col-sm-6">
+              <label for="street_name" class="text-18 text-arial">Street Name</label>
+              <input name="street_name" type="text" class="form-control" id="street_name" placeholder="type street name" >
+            </div>
 
           </div>
 
@@ -121,15 +125,17 @@
 
     $("#category_name").change(function(){
         var categoryId = $(this).val();
-        if (categoryId == 1) {
+        if (categoryId == 3) {
 
         $("#PCondition").hide();
+        $("#street_name_div").show();
         $("#productConditionDiv").hide();
         $("#brandDiv").hide();
         $("#pTime").val("");
         $("#pForm").val("");
   
         }else{
+          $("#street_name_div").hide();
           $("#PCondition").show();
           $("#brandDiv").show();
         }
@@ -163,6 +169,8 @@
                      error: function(xhr){
                         $.each(xhr.responseJSON.errors, function(key,value){
                         $("#img_message").text(value[0]).removeClass("text-info").addClass("text-danger"); 
+                         $("#image_preview").attr('src',"");
+                        $("#imgPreviewContainer").hide();
                          
                         });
                       }
@@ -172,7 +180,7 @@
                }else{
                 $("#image_preview").attr('src',"");
                 $("#imgPreviewContainer").hide();
-                alert("PLEASE MAKE THE WIDTH OF YOUR IMAGE GREATER THAN ITS HEIGHT(for better display)")
+                alert("PLEASE MAKE SURE THE WIDTH OF YOUR IMAGE IS GREATER THAN ITS HEIGHT(for better display)")
                }
               
     });

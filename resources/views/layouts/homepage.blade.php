@@ -8,7 +8,7 @@
     <meta name="author" content="">
 <!-- Bootstrap style --> 
     <link id="callCss" rel="stylesheet" href="{{ asset('themes/bootshop/bootstrap.min.css') }}" media="screen"/> 
-    <link href="{{ asset('themes/css/base.css') }}" rel="stylesheet" media="screen"/>
+    <link href="{{ asset('themes/css/styles.css') }}" rel="stylesheet" media="screen"/>
     <link href="{{ asset('themes/css/flickity.css') }}" rel="stylesheet" media="screen"/>
 <!-- Bootstrap style responsive -->	
 	<link href="{{ asset('themes/css/bootstrap-responsive.min.css') }}" rel="stylesheet"/>
@@ -18,6 +18,8 @@
 .brown-color {
   color: #f8694a;
 }
+  
+
 #all-categories {
 	position: fixed;
 	top: 0px;
@@ -71,6 +73,8 @@
 ::-webkit-scrollbar {
 	width: 0px;
 }*/
+
+
 
 	</style>
   </head>
@@ -174,10 +178,25 @@
 
 <!-- end of search engines  container................................................................. -->
 <div id="header">
+	
 	              @if(Session()->has('registration_session'))
 						<div class="alert alert-block alert-success fade in">
 							<button type="button" class="close" data-dismiss="alert">×</button>
                              <p>{{ Session('registration_session') }}</p>
+						</div>
+				  @endif
+
+	              @if(Session()->has('password_updated'))
+						<div class="alert alert-block alert-success fade in">
+							<button type="button" class="close" data-dismiss="alert">×</button>
+                             <p>{{ Session('password_updated') }}</p>
+						</div>
+				  @endif
+
+	              @if(Session()->has('account_activated'))
+						<div class="alert alert-block alert-success fade in">
+							<button type="button" class="close" data-dismiss="alert">×</button>
+                             <p>{{ Session('account_activated') }}</p>
 						</div>
 				  @endif
 
@@ -212,21 +231,22 @@
 		    <div class="f-item2">
 		       	  <div>
 					<form id="topUniversitiesForm" style="margin: 0px !important;" class="form-inline" method="get" action="{{ route('university.products') }}" >
-						@csrf
+						@csrf 
 						<input type="hidden" value="{{ url('/university_products') }}" name="university_products_path" id="university_path">
-						<div style="display: inline-flex;">
-						  <select id="top_universities" name="top_universities" class="srchTxt">
-							<option value="">Top Universities' Products</option>
-						@if(count($universities))
-						  @foreach($universities as $university)
-							<option value="{{ $university->university_id }}">{{ $university->university->name }} ({{ $university->university_count }}) </option>
-						  @endforeach
-						@endif
 
-						 </select> 
-						  <button type="submit" id="submitButton" class="btn btn-primary"><i class="icon-search" style="font-size: 18px"></i></button>
-			            </div>
-			         </form>
+										 <div class="btn-group">
+											  <select id="top_universities" name="top_universities" class="srchTxt">
+												<option value="">Top Universities' Products</option>
+											@if(count($universities))
+											  @foreach($universities as $university)
+												<option value="{{ $university->university_id }}">{{ $university->university->name }} ({{ $university->university_count }}) </option>
+											  @endforeach
+											@endif
+											 </select> 
+								             <button type="submit" id="submitButton" class="btn btn-primary"><i class="icon-search" style="font-size: 18px"></i></button>
+								         </div>
+
+			           </form>
 			       </div> 
 		
 		    </div>
@@ -239,7 +259,7 @@
 				 		</div>
 				 		<form id="rProductsForm" method="get" action="{{ route('region.products') }}">
 				 			@csrf
-				 		<input type="hidden" value="{{ url('/region_products') }}" name="region_products_path" id="regions_path">
+				 		<input type="hidden" value="{{ url('/region_products') }}" name="region_products_path" id="regions_path"> 
 					 	<select id="regions_products" name="region_id">
 					 		<option selected="selected" value="">Select Region</option>
 					 		@if(count($regions))
@@ -263,7 +283,7 @@
 				 @endif				 
 				 <li style="position: relative;" id="lg">
 			     @if(Auth::check())
-			        <a id="profile-link" href="#" role="button" class="navlink"><i class="icon-user"></i>Profile</a>
+			        <a id="profile-link" href="#" role="button" class="navlink"><i class="icon-user profile-link"></i>Profile</a>
 			           <div id="profile-container" class="d-none">
 			               <div id="logout-profile-div" class="d-flex flex-column bg-logo">
 			               	 <div style="border-bottom: 1px solid #a55316" id="flex-item">
@@ -310,7 +330,7 @@
 								<button class="btn" type="button" id="CloseBtn">Close</button>
 							  </div>
 							  <div>
-							  	<a style="padding: 5px;" class="text-blue" href="#">Forgot password?</a>
+							  	<a style="padding: 5px;" class="text-blue" href="{{ route('reset_password') }}">Forget password?</a>
 							  	<a style="padding: 5px;" class="text-blue" href="{{ route('user.create') }}">Create Account</a>
 							  </div>
 							</div>

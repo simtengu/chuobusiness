@@ -16,7 +16,7 @@
 	<!-- Sidebar ================================================== -->
 		<div id="sidebar" class="span3">
 			<div class="well well-small">
-			<a href="{{ route('products.order_type',1) }}" style="font-size: 18px; font-weight: bold;padding: 13px 35px;" class="text-orange">>>>Back to products</a>
+			<a href="{{ route('products.order_type','latest') }}" style="font-size: 16px; font-weight: bold;padding: 13px 35px;" class="text-orange">>>>Back to products</a>
 			</div>
 		</div>
 	<!-- Sidebar end=============================================== -->
@@ -46,7 +46,8 @@
 				</div>
 			</div>
 			<div class="span6">
-				<h3 class="text-orange">{{ $product->product_name  }} </h3>
+				<h3 style="margin-bottom: 0px !important" class="text-orange text-times ">{{ $product->product_name  }} </h3>
+				<label style="margin: 0px 5px !important;" class="text-times text-15">Condition: @if($product->period_value )Used for {{ $product->period_value }} {{ $product->period->name }}@if($product->period_value != 1)s @endif @else Brand new  @endif </label> 
 			<hr class="soft"/>
             <div id="myTabContent" class="tab-content">
               <div>
@@ -66,12 +67,11 @@
 						<label class="text-16">{{ $product->user->phone_2 ?? "" }}</label>
 						<label class="text-16">{{ $product->user->email }}</label>
 					</div>
-					<a  href="{{ route('user.shop',$product->user->email) }}"> <h5 class="text-orange text-arial text-16 ">More items from this item owner</h5></a>
+					<a  href="{{ route('user.shop',$product->user->email) }}"> <h5 class="text-orange text-arial text-16 "> >>>More items from this Seller</span></h5></a>
 					<hr class="soft"/>
-					<div style="border: 1px solid red; display:inline-block; padding: 7px; border-radius: 5px; margin-top: 10px">
-						 <p style="color: red" class="text-times text-18">Is this post inappropriate?</p>
+					<div style="margin-top: 10px">
+						 <p style="color: #e97774" class="text-times text-15">Is this post abusive/inappropriate?</p>
 						 <a style="padding: 3px;" href="{{ route('reportPost',$product->id) }}" class="btn btn-md btn-danger">Click to report it</a>
-
 					</div>
 				</div>
               </div>
@@ -92,22 +92,22 @@
 	  @if($more_related_count > 0)
            @foreach($more_related_items as $product)
             @if(count($product->photo))
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-					  	</div>
-					  	<a style="color: black;display: block;" href="{{ route('item_preview',[1,$product->id]) }}">
-						<div class="caption">
-						  <h5>{{ $product->product_name }}</h5>
-						  <p> 
-							{{ Str::limit($product->product_description,80) }}
-						  </p>
-						  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary" >{{ number_format($product->product_price) }}</button></h4>
-						</div>
-					   </a>
-					  </div>
-			</div>
+               <div id="media_container">
+               	<a href="{{ route('item_preview',[1,$product->slug]) }}" id="product_link">
+	                <div id="media">
+	                	<div id="media-pic">
+	                   		<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">
+	                	</div>
+	                	<div id="media-body">
+			                <h5 class="font-weight-bold text-times text-14">{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+			                  <label class="mb-0 text-dark">{{ number_format($product->product_price)  }} <span class="text-orange">Tsh</span></label>
+			                <p style="line-height: 18px;">
+			                  {{ Str::limit($product->product_description,45) }}
+			                </p>
+	                	</div>
+	                </div>
+               	</a>	
+               </div>
 			@endif
 		  @endforeach
 		
@@ -116,22 +116,22 @@
  	  @if($less_related_count > 0)
            @foreach($less_related_items as $product)
             @if(count($product->photo))
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-					  	</div>
-					  <a href="{{ route('item_preview',[1,$product->id]) }}">
-						<div class="caption">
-						  <h5>{{ $product->product_name }}</h5>
-						  <p> 
-							{{ Str::limit($product->product_description,80)}}
-						  </p>
-						  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-						</div>
-					    </a>
-					  </div>
-			</div>
+               <div id="media_container">
+               	<a href="{{ route('item_preview',[1,$product->slug]) }}" id="product_link">
+	                <div id="media">
+	                	<div id="media-pic">
+	                   		<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">
+	                	</div>
+	                	<div id="media-body">
+			                <h5 class="font-weight-bold text-times text-14">{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+			                  <label class="mb-0 text-dark">{{ number_format($product->product_price)  }} <span class="text-orange">Tsh</span></label>
+			                <p style="line-height: 18px;">
+			                  {{ Str::limit($product->product_description,45) }}
+			                </p>
+	                	</div>
+	                </div>
+               	</a>	
+               </div>
 			@endif
 		  @endforeach
 		
@@ -141,22 +141,22 @@
  	  @if($less_related_count1 > 0)
            @foreach($less_related_items1 as $product)
             @if(count($product->photo))
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-					  	</div>
-					  <a href="{{ route('item_preview',[1,$product->id]) }}">
-						<div class="caption">
-						  <h5>{{ $product->product_name }}</h5>
-						  <p> 
-							{{ Str::limit($product->product_description,80)}}
-						  </p>
-						  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-						</div>
-					    </a>
-					  </div>
-			</div>
+               <div id="media_container">
+               	<a href="{{ route('item_preview',[1,$product->slug]) }}" id="product_link">
+	                <div id="media">
+	                	<div id="media-pic">
+	                   		<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">
+	                	</div>
+	                	<div id="media-body">
+			                <h5 class="font-weight-bold text-times text-14">{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+			                  <label class="mb-0 text-dark">{{ number_format($product->product_price)  }} <span class="text-orange">Tsh</span></label>
+			                <p style="line-height: 18px;">
+			                  {{ Str::limit($product->product_description,45) }}
+			                </p>
+	                	</div>
+	                </div>
+               	</a>	
+               </div>
 			@endif
 		  @endforeach
 		
@@ -167,14 +167,7 @@
 	</div>
 	<!-- Sidebar for advertisment  ================================================== -->
 	<div id="sidebar" class="span3">
-          <div style="background-color: #f5f5f5" class="thumbnail">
-            <!-- <img src="http://placehold.it/260x180" alt=""> -->
-            <div class="caption">
-              <h5>Advertisment <br> <span class="text-arial text-orange">From chuobusiness community</span></h5>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-            </div>
-          </div>
+      @include('includes.sidebar')
 	</div>
 	<!-- Sidebar end=============================================== -->
  </div>
@@ -184,7 +177,7 @@
 	<!-- Sidebar ================================================== -->
 		<div id="sidebar" class="span3">
 			<div class="well well-small">
-			<a href="{{ route('products.order_type',1) }}" style="font-size: 16px; font-weight: bold;padding: 13px 35px;" class="text-orange">>>chuobusiness shop</a>
+			<a href="{{ route('customer.chuobusiness_products') }}" style="font-size: 16px; font-weight: bold;padding: 13px 35px;" class="text-orange">>>chuobusiness shop</a>
 			</div>
 		</div>
 	<!-- Sidebar end=============================================== -->
@@ -265,47 +258,48 @@
 	  @if(count($chuoproducts) > 0)
            @foreach($chuoproducts as $product)
             @if(count($product->image))
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[2,$product->id]) }}"><img src="{{ asset('pictures') }}/{{ $product->image[0]->name }}"></a>
-					  	</div>
-					  	<a style="color: black;display: block;" href="{{ route('item_preview',[2,$product->id]) }}">
-						<div class="caption">
-						  <h5>{{ $product->product_name }}</h5>
-						  <p> 
-							{{ Str::limit($product->product_description,80) }}
-						  </p>
-						  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary" >{{ number_format($product->product_price) }}</button></h4>
+			<div style="margin-top: 4px;" id="fb">
+				<a id="chuoproductLink" href="{{ route('item_preview',[2,$product->slug]) }}">
+				<div class="img-container">
+					<img src="{{ asset('pictures') }}/{{ $product->image[0]->name }}"  >
+				</div>
+				<div style=" padding: 1px 5px 4px;" class="chuoproduct-body bg-light-range">
+					<label  class="text-times text-16">{{ Str::limit($product->product_name,26) }}</label>
+					<div  class="d-flex justify-content-between">
+						<div>
+						<label  class="text-times text-16">{{ number_format($product->product_price,0) }} Tsh</label>	
 						</div>
-					   </a>
-					  </div>
+						<div><button>view more</button></div>
+					</div>
+				</div>
+			</a>
 			</div>
 			@endif
 		  @endforeach
 		
 	@endif
-
+ </div>
  <!-- normal products related to specified chuoproduct............................................................. -->
+ <div class="row" style="display: flex;flex-wrap: wrap !important;justify-content: start; margin-top: 4px">
  	  @if(count($products) > 0)
            @foreach($products as $product)
             @if(count($product->photo))
-			<div id="col">
-					  <div class="thumbnail">
-					  	<div class="thumbnail-header">
-					  		<a href="{{ route('item_preview',[1,$product->id]) }}">@if(count($product->photo))<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">@endif</a>
-					  	</div>
-					  <a href="{{ route('item_preview',[1,$product->id]) }}">
-						<div class="caption">
-						  <h5>{{ $product->product_name }}</h5>
-						  <p> 
-							{{ Str::limit($product->product_description,80)}}
-						  </p>
-						  <h4 style="text-align:center"><button class="btn"> <i class="icon-zoom-in"></i></button><button class="btn btn-primary">{{ number_format($product->product_price) }}</button></h4>
-						</div>
-					    </a>
-					  </div>
-			</div>
+               <div id="media_container">
+               	<a href="{{ route('item_preview',[1,$product->slug]) }}" id="product_link">
+	                <div id="media">
+	                	<div id="media-pic">
+	                   		<img src="{{ asset('images') }}/{{ $product->photo[0]->name }}">
+	                	</div>
+	                	<div id="media-body">
+			                <h5 class="font-weight-bold text-times text-16">{{ $product->product_name }} @if($product->period_id != null) <span class="text-orange text-times text-16">(used)</span> @endif</h5>
+			                  <label class="mb-0 text-dark">{{ number_format($product->product_price)  }} <span class="text-orange">Tsh</span></label>
+			                <p style="line-height: 18px;">
+			                  {{ Str::limit($product->product_description,45) }}
+			                </p>
+	                	</div>
+	                </div>
+               	</a>	
+               </div>
 			@endif
 		  @endforeach
 		
@@ -316,19 +310,11 @@
 	</div>
 	<!-- Sidebar for advertisment  ================================================== -->
 	<div id="sidebar" class="span3">
-          <div style="background-color: #f5f5f5" class="thumbnail">
-            <!-- <img src="http://placehold.it/260x180" alt=""> -->
-            <div class="caption">
-              <h5>Advertisment <br> <span class="text-arial text-orange">From chuobusiness community</span></h5>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-            </div>
-          </div>
+      @include('includes.sidebar')
 	</div>
 	<!-- Sidebar end=============================================== -->
  </div>
 
 @endif
-
 
 @endsection
