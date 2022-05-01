@@ -160,8 +160,9 @@
        <label id="copy_message" class="text-success d-block mt-2 text-18 text-times"></label>
      </div>
      @endif
-     <div  class="col-lg-2 bg-primary d-flex justify-content-center ">
+     <div  class="col-lg-2  d-flex justify-content-center ">
           <!-- advertisment here.............. -->
+        
      </div>
  <!--     profile main section...................................................... -->
      <div style="min-height: 70vh !important" class="col-lg-10">

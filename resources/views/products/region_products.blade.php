@@ -10,18 +10,22 @@
 			@endforeach
 		</ul>
 		<br/>
-  @include('includes.sidebar')
+		  <div class="d-large">
+		  	 @include('includes.sidebar')
+		  </div>
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">	
 	<h4 class="text-orange text-arial" style="text-transform: capitalize;">{{ $region->name }} universities</h4>
 	<div id="region-universities-div"  class="padding-3">
-		<a style="border: none;" href="#">(A-Z) &nbsp;</a>
 		
 	  @if(count($region_universities))
+	  <a style="border: none;" href="#">(A-Z) &nbsp;</a>
 		@foreach($region_universities as $university)
-		<a href="{{ route('university_products',[$university->university_id,'latest']) }}">{{ $university->university->name }} <span class="badge">{{ $university->uv_count }}</span></a>
+		<a href="{{ route('university_products',[$university->id,'latest']) }}">{{ $university->name }} <span class="badge">{{ $university->product_count }}</span></a>
 		@endforeach
+		@else 
+		<label class="">Currentlly there is no registered universities for this region.</label>
 	  @endif
 	</div>			
 	<hr class="soft"/>	

@@ -142,6 +142,7 @@ $(document).ready(function(){
 $("#login_form input[type=password]").focus(function(){
       $("#pwd_check").text('').removeClass("d-block").addClass("d-none");
 });
+alert("trying");
 $("#login_form").submit(function(event){
   event.preventDefault();
   var path = $("input[name=login_url]").val();
@@ -150,6 +151,12 @@ $("#login_form").submit(function(event){
       url: path,
       method: "POST",
       data: $(this).serializeArray(),
+      beforeSend: function(){
+        $("#pwd_check").text("Loading.......").removeClass("d-none").addClass("d-block");
+      },
+      complete: function(){
+         $("#pwd_check").text("").removeClass("d-block").addClass("d-none");
+      },
       success: function(res){
         if (res == "ok") {
               window.location.href = "/chuobusiness/public";

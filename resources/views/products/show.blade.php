@@ -34,6 +34,9 @@
          <h5 class="text-times text-18">{{ $product->product_name }}</h5>
          @if($product->period_value )<h5 class="text-times text-16">Used for {{ $product->period_value }} {{ $product->period->name }}@if($product->period_value != 1)s @endif</h5> @endif 
          <h5>{{ $product->product_price }} <span class="text-info">Tsh</span></h5> 
+         <h5 class="text-times text-18">Category: {{ $product->category->name }}</h5>
+         @if($product->brand)<h5 class="text-times text-18">Brand: {{ $product->brand->name }}</h5>@endif
+         @if($product->street_name)<h5 class="text-times text-18">Street: {{ $product->street_name }}</h5>@endif
         </div>
         <div class="col-md-6">
           <div class="car p-2">

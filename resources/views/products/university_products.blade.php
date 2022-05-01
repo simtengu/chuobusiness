@@ -10,7 +10,9 @@
 			@endforeach
 		</ul>
 		<br/>
-  @include('includes.sidebar')
+  		  <div class="d-large">
+		  	 @include('includes.sidebar')
+		  </div>
 	</div>
 <!-- Sidebar end=============================================== -->
 	<div class="span9">	

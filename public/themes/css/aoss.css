@@ -4,19 +4,10 @@ body {
   margin: 0px !important;
 }
 
-.d-large {
-  display: none;
-}
-
 #fb {
   width: 24%;
   margin-right: 6px;
   border-radius: 4px;
-  margin-top: 4px; box-shadow: 1px 1px 1px #d4d4d4;
-}
-
-#fb button {
-  background-color: white; border: 1px solid #dbdbdb;padding: 3px;border-radius: 4px;
 }
 
 #fb .img-container{
@@ -64,9 +55,6 @@ body {
 #chuoproductLink:hover {
   text-decoration: none;
 }
-#product_link {
-  text-decoration: none;
-}
 
 #col .thumbnail a:hover {
      text-decoration: none;
@@ -94,15 +82,9 @@ body {
   font-size: 17px;
 }
 
+
 .text-16 {
   font-size: 16px;
-}
-.text-15 {
-  font-size: 15px;
-}
-
-.text-14 {
-  font-size: 14px;
 }
 
 .text-18 {
@@ -121,7 +103,7 @@ body {
   text-decoration: none;
  
 }
- 
+
 .pagination .page-item {
   list-style-type: none;
   display: inline;
@@ -301,11 +283,6 @@ body {
   #col , .carousel-cell {
   width: 30%;
   padding: 2px;
-
- }
- #col .thumbnail {
-  height: auto !important;
-
  }
 
  .padding-0 {
@@ -437,32 +414,6 @@ box-shadow: 2px 2px 4px black;
        #loginDiv #inputEmail, #loginDiv #inputPassword {
         border: 1px solid #797979 !important;
        }
-
-#complete-flex{
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-} 
-#media_container {
-  width: 100%;
-  border: 1px solid #d4d4d4;
-  margin: 2px 1px 0px;
-}
-#media {
-  width: 100%;
-  display: flex;
-}
-#media-pic {
- width: 40%; 
-}
-#media-pic img {
-  width: 100%;
-  height: auto;
-}
-
-#media-body {
-  padding: 2px 3px;
-}
 /* end of navigation codes...............................................................*/
 
 /*end of my main addition css.........................*/
@@ -520,26 +471,6 @@ box-shadow: 2px 2px 4px black;
 /* Large desktop */
 @media (min-width: 1200px) { 
 /*my own css addition...........................*/
-/* #carousel-well{
-  min-height: 260 !important;
- }*/
-.d-large {
-  display: block;
-}
-
-#media_container {
-  width: 49%;
-}
-#media-pic {
- width: 40%; 
-
-}
-
-
-
-#col .caption {
-  position: relative;
-}
 #productFooter {
    position: absolute;bottom: 0px;left: 20%;
 }
@@ -577,33 +508,6 @@ box-shadow: 2px 2px 4px black;
 
 
  }
- @media (min-width: 980px) and (max-width: 1199px) {
-.d-large {
-  display: block;
-}
-#media_container {
-  width: 49%;
-}
-#media-pic {
- width: 37%; 
- min-width: 37%;
-}
-  #fb {
-  width: 35%;
-}
-
- #col .caption , .carousel-cell .caption {
-  min-height: 151px;
- }
-
- #col .caption {
-  position: relative;
-}
-#productFooter {
-   position: absolute;bottom: 0px;left: 20%;
-}
-
- }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
 .navbar .brand {float: none;text-align: center;}
@@ -624,12 +528,7 @@ box-shadow: 2px 2px 4px black;
  }
  #col .caption , .carousel-cell .caption {
   min-height: 151px;
-  position: relative;
- }  
-
- #productFooter {
-   position: absolute;bottom: 0px;left: 26%;
-}
+ }
       .f-item3 {
         padding-top: 10px;
        }
@@ -642,39 +541,18 @@ box-shadow: 2px 2px 4px black;
     width: 50vw;
 }
 
-#fb {
-  width: 40%;
-  margin-right: 6px;
-  border-radius: 4px;
-}
-
-  #col img , .carousel-cell img {
-  max-width: 171px;
- }
-
-#media-pic {
- width: 35%; 
-}
-
-
 }
 /* Landscape phone to portrait tablet***************************************** */
 @media (max-width: 767px) {
- #col .caption , .carousel-cell .caption {
-  min-height: 151px;
-  position: relative;
- }
  #col , .carousel-cell {
   width: 48%;
   padding: 2px;
  }
 
-#productFooter {
-   position: absolute;bottom: 0px;left: 26%;
-}
-
 #fb {
-  width: 39%;
+  width: 48%;
+  margin-right: 4px;
+
 }
 
   #col img , .carousel-cell img {
@@ -810,13 +688,6 @@ display: block;
     width: 60vw;
     margin-top: 0px;
 }
-
-#media-pic {
-  width: 32%;
-}
-
-
-
  }
 /* Landscape phones and down........................................ */
 @media (max-width: 480px) {
@@ -926,19 +797,7 @@ display: block;
 
 }
 
-#productFooter {
-   position: relative;
-   left: 0px;
-   right: 0px;
-}
-#media-pic {
-  width: 40%;
- min-width: 40%;
-}
-
-.profile-link {
-  margin-top: 4px;
-}
 
 /* end of my own css....................*/
 }
+

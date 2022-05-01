@@ -8,13 +8,14 @@ use App\Region;
 use App\Product;
 use App\University;
 use App\Chuoproduct;
+use App\Mail\VerifyAccount;
 use Illuminate\Http\Request;
 use App\Http\Requests\Signup;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductsController;
-use App\Mail\VerifyAccount;
 
 class UsersController extends Controller
 {
@@ -146,6 +147,7 @@ class UsersController extends Controller
           $uv_id = $user->university_id;
       }else{
           $uv_id = $formUv_id;
+          DB::update('update products set university_id = ? where user_id = ?', [$uv_id,$user->id]);
       }
 
        $user->fname = $request->fname;

@@ -1,10 +1,7 @@
 @extends('layouts.homepage')
 @section('content')
  <div class="row">
-	<div id="sidebar" class="span3">
-        @include('includes.sidebar')
-	</div>
-<!-- Sidebar end=============================================== -->
+
 	<div class="span9">
     <ul class="breadcrumb">
 		<li><a href="{{ url('/') }}">Home</a> <span class="divider">/</span></li>
@@ -118,6 +115,10 @@
 </div>
 
 </div>
+	<div id="sidebar" class="span3">
+        @include('includes.sidebar')
+	</div>
+<!-- Sidebar end=============================================== -->
 </div>
 @stop
 @section('scripts')

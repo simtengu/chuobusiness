@@ -4,6 +4,10 @@ body {
   margin: 0px !important;
 }
 
+.d-large {
+  display: none;
+}
+
 #fb {
   width: 24%;
   margin-right: 6px;
@@ -519,6 +523,10 @@ box-shadow: 2px 2px 4px black;
 /* #carousel-well{
   min-height: 260 !important;
  }*/
+.d-large {
+  display: block;
+}
+
 #media_container {
   width: 49%;
 }
@@ -570,7 +578,9 @@ box-shadow: 2px 2px 4px black;
 
  }
  @media (min-width: 980px) and (max-width: 1199px) {
-
+.d-large {
+  display: block;
+}
 #media_container {
   width: 49%;
 }

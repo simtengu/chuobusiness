@@ -100,7 +100,7 @@
    <div class="container-fluid">
    <div class="row pb-4">
      <div  class="col-md-3 d-flex justify-content-start ">
-          <div id="user-links-div" class="mt-4 py-2">       
+          <div style="overflow-x: hidden; display: inline-block;" id="user-links-div" class="mt-4 py-2">       
 
                <div class="d-flex flex-column text-lead text-capitalize"> 
                  <a style="font-size: 21px;" href="{{ route('product.premium') }}" class="text-warning d-block">+Premium</a>
@@ -111,11 +111,12 @@
                  <a href="{{ route('user.shop',Auth::user()->email) }}" class="text-info">My shop</a>
                  @if($cat_count > 0)
                   @foreach($categories as $category)
-                   
+                
                 <a href="{{ route('user_cat.products',$category->category_id) }}" class="text-info text-lowercase">
                 {{ $category->category->name }} <label class="badge badge-info">({{ $category->total }})</label></a>
                   @endforeach
                  @endif
+               
                  <a class="text-info" href="{{ route('signout') }}"
                      onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();"> <span class="glyphicon glyphicon-log-out  mr-1"></span>logout </a>

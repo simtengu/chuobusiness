@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$("#document-loader-div").hide();
 	$("#document-loader-div").click(function(){
 		$(this).hide();
-	});
+	}); 
 		
 	$('.subMenu > a').click(function(e)
 	{
@@ -150,11 +150,14 @@ $("#login_form").submit(function(event){
       url: path,
       method: "POST",
       data: $(this).serializeArray(),
+      beforeSend: function(){
+        $("#pwd_check").text("Loading.......").removeClass("d-none").addClass("d-block");
+      },
       success: function(res){
         if (res == "ok") {
               window.location.href = "/chuobusiness/public";
         }else{
-         $("#pwd_check").text(res).removeClass("d-none").addClass("d-block"); 
+         $("#pwd_check").text(res); 
         }  
       },
       error: function(rs){
@@ -208,7 +211,7 @@ $("#regions_products").change(function(){
    var region_id = $(this).val();
    var path = $("#regions_path").val();
    if (region_id != "") {
-    window.location.href= path+"/"+region_id+"/1";
+    window.location.href= path+"/"+region_id+"/latest";
    }
 });
 
@@ -216,7 +219,7 @@ $("#regions_items").change(function(){
    var region_id = $(this).val();
    var path = $("#regions_path").val();
    if (region_id != "") {
-    window.location.href= path+"/"+region_id+"/1";
+    window.location.href= path+"/"+region_id+"/latest";
    }
 });
 
@@ -238,7 +241,7 @@ $("#top_universities").change(function(){
     var university_id = $(this).val();
     var path = $("#university_path").val();
    if (university_id != "") {
-    window.location.href= path+"/"+university_id+"/1";
+    window.location.href= path+"/"+university_id+"/latest";
    }
 });
   $("#topUniversitiesForm").submit(function(e){
@@ -263,21 +266,40 @@ $("#searchEngine_close_btn").click(function(){
 $(".searchContainer").click(function(e){
       e.stopPropagation();
 });
-//opening specified search form....................
+//opening specified search form...........................................
 //nation level item search
 $(".a-search-field").focus(function(){
 	$(".a-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
-  	$(".a-search-form input[type='text']").focus();
+  	$(".a-search-form input[type='text']").val("").focus();
+  	 $("#a-search-suggestions").html("");
+  	 
   }); 
 });
-// user university.college search
+// user university.college search.........................................
 $(".college-search-field").focus(function(){
 	$(".university-search-form").show();
     $("#searchEnginesContainer").fadeIn(function(){
-  	$(".university-search-form input[type='text']").focus();
+  	$(".university-search-form input[type='text']").val("").focus();
+  	 $("#college-search-suggestions").html("");
   }); 
 });
+// region level item search.................................................
+$(".b-search-field").focus(function(){
+	$(".b-search-form").show();
+    $("#searchEnginesContainer").fadeIn(function(){
+  	$(".b-search-form input[type='text']").val("").focus();
+  	 $("#b-search-suggestions").html("");
+  }); 
+});
+//university level item search.....................................
+$(".c-search-field").focus(function(){
+	$(".c-search-form").show();
+    $("#searchEnginesContainer").fadeIn(function(){
+  	$(".c-search-form input[type='text']").val("").focus();
+  	 $("#c-search-suggestions").html("");
+  }); 
+}); 
 // search forms validation and normal submittion............................
 $(".a-search-form").submit(function(e){
  var item = $(".a-search-form input[type='text']").val();
@@ -287,7 +309,22 @@ $(".a-search-form").submit(function(e){
 
 });
 
-// search forms validation and normal submittion............................
+$(".b-search-form").submit(function(e){
+ var item = $(".b-search-form input[type='text']").val();
+ if (item.length < 1) {
+ 	e.preventDefault();
+ }
+
+});
+
+$(".c-search-form").submit(function(e){
+ var item = $(".c-search-form input[type='text']").val();
+ if (item.length < 1) {
+ 	e.preventDefault();
+ }
+
+});
+
 $(".university-search-form").submit(function(e){
  var item = $(".university-search-form input[type='text']").val();
  if (item.length < 1) {
@@ -299,7 +336,7 @@ $(".university-search-form").submit(function(e){
 // product search  request at nation level.......................................
          $(".a-search-form input[type='text']").on('keyup',function(){
          if ($(this).val().trim() != ""){
-           var item = $(this).val();
+           var item = $(this).val().trim();
            var path = $("#a-search-path").val();
              if (item.length > 1) {
 	           $.ajax({
@@ -319,10 +356,58 @@ $(".university-search-form").submit(function(e){
          }
         });
 
+// product search  request at region level..................................................
+         $(".b-search-form input[type='text']").on('keyup',function(){
+         if ($(this).val().trim() != ""){
+           var item = $(this).val().trim();
+           var path = $("#b-search-path").val();
+         
+             if (item.length > 1) {
+	           $.ajax({
+	             url: path +"/"+ item ,
+	             method: "GET",
+	             success: function(rs){
+	               $("#b-search-suggestions").html(rs);
+	             },
+	             error: function(){
+	             	console.log("something went wrong");
+	             }
+	           });
+             }
+
+         }else{
+              $("#b-search-suggestions").html("");
+         }
+        });
+
+// product search  request at university level..................................................
+         $(".c-search-form input[type='text']").on('keyup',function(){
+         if ($(this).val().trim() != ""){
+           var item = $(this).val().trim();
+           var path = $("#c-search-path").val();
+         
+             if (item.length > 1) {
+	           $.ajax({
+	             url: path +"/"+ item ,
+	             method: "GET",
+	             success: function(rs){
+	               $("#c-search-suggestions").html(rs);
+	             },
+	             error: function(){
+	             	console.log("something went wrong");
+	             }
+	           });
+             }
+
+         }else{
+              $("#c-search-suggestions").html("");
+         }
+        });
+
 //university search request.....................................
          $(".university-search-form input[type='text']").on('keyup',function(){
           if ($(this).val().trim() != ""){
-           var item = $(this).val();
+           var item = $(this).val().trim();
            var path = $("#university-search-path").val();
              if (item.length > 1) {
 	           $.ajax({

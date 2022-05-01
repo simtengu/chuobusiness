@@ -22,12 +22,12 @@
         <input id="form_id" type="hidden" value="{{ $product->id }}" name="form_id">
           <div id="nwProductFmrow"  class="d-flex">
             <div class="form-group col-sm-6">
-            {!! Form::label('item_name','Product name') !!}
+            {!! Form::label('item_name','Product name',['class'=>'text-18 text-arial']) !!}
             {!! Form::text('product_name',null,['class'=>'form-control','id'=>'item_name','required'=>'required']) !!}
             </div>
 
             <div class="form-group col-sm-6">
-              {!! Form::label('category_name','Product Category') !!}
+              {!! Form::label('category_name','Product Category',['class'=>'text-18 text-arial']) !!}
               {!! Form::select('category_id',$cats,null,['class'=>'form-control','id'=>'category_name','required'=>'required']) !!}
                 
             </div>            
@@ -35,25 +35,29 @@
 
           <div id="nwProductFmrow"  class="d-flex">
             <div class="form-group col-sm-6">
-             {!! Form::label('pPrice','Product price(Tsh)') !!}
+             {!! Form::label('pPrice','Product price(Tsh)',['class'=>'text-18 text-arial']) !!}
              {!! Form::number('product_price',null,['class'=>'form-control','id'=>'pPrice','required'=>'required','min'=>'1']) !!}
                         
             </div>
             <div id="brandDiv" class="form-group col-sm-6">
-              {!! Form::label('brand_name','Product Brand') !!}
+              {!! Form::label('brand_name','Product Brand',['class'=>'text-18 text-arial']) !!}
               {!! Form::select('brand_id',$brands,null,['class'=>'form-control','required'=>'required']) !!}
-            </div>           
+            </div> 
+            <div id="street_name_div" style="display: none;" class="form-group col-sm-6">
+            {!! Form::label('street_name','Street Name',['class'=>'text-18 text-arial']) !!}
+            {!! Form::text('street_name',null,['class'=>'form-control','id'=>'street_name']) !!}
+            </div>          
           </div>
           <div class="row pl-1">
             <div id="PCondition" class="form-group col-sm-6 pl-4">
-              <label>Item Condition</label>
+              <label class="text-arial text-18">Item Condition</label>
               <div class="d-flex ">
                 <p class="mr-4"><input type="radio" name="condition" id="new_radio" value="new" checked>&nbsp; New</p>
                 <p><input type="radio" name="condition" value="used" id="used_radio">&nbsp; Used</p>
               </div>
             </div>
             <div id="productConditionDiv" class="form-group col-sm-6">
-              {!! Form::label('pTime','Product used for') !!}
+              {!! Form::label('pTime','Product used for',['class'=>'text-18 text-arial']) !!}
               <div class="d-flex justify-content-start">
               {!! Form::number('period_value',null,['class'=>'form-control','id'=>'pTime','min'=>'1']) !!}
 
@@ -67,7 +71,7 @@
 
            <div class="col-12">
             <div class="form-group col-sm-6">
-              <label id="img_message">Item Images</label><br>
+              <label id="img_message" class="text-18 text-arial">Item Images</label><br>
               <label class="btn btn-outline-info mt-2" for="product_image">Add Image</label>
                 <input class="d-none" id="product_image" type="file" name="product_image" accept="image/*">
                 <button  role="button" type="button" class="btn btn-danger d-none" id="imgBTN">
@@ -77,7 +81,7 @@
           </div>
             
             <div class="p-3">
-              {!! Form::label('pDescription','Product description') !!}
+              {!! Form::label('pDescription','Product description',['class'=>'text-18 text-arial']) !!}
               {!! Form::textarea('product_description',null,['class'=>'form-control','rows'=>'5','id'=>'pDescription']) !!}
               <span id="description_check" style="font-size: 14px" class="d-none text-danger p-0 m-0"></span>
             </div>
@@ -93,7 +97,8 @@
 
   $(document).ready(function(){
  //checking product category...........................
-   if ($("#category_name").val() == 1) {
+   if ($("#category_name").val() == 3) {
+        $("#street_name_div").show();
         $("#PCondition").hide();
         $("#productConditionDiv").hide();
         $("#brandDiv").hide();   
@@ -114,13 +119,15 @@
 
     $("#category_name").change(function(){
         var categoryId = $(this).val();
-        if (categoryId == 1) {
-
+        if (categoryId == 3) {
+        $("#street_name_div").show();
         $("#PCondition").hide();
         $("#productConditionDiv").hide();
         $("#brandDiv").hide();
 
         }else{
+          $("#street_name").val(null);
+          $("#street_name_div").hide();
           $("#PCondition").show();
           $("#brandDiv").show();
         }

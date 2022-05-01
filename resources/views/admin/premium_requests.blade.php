@@ -29,7 +29,7 @@
                                                 <th>college</th>
                                                 <th colspan="2">Message</th>
                                                 
-                                            </tr>
+                                            </tr> 
                                         </thead>
                                         <tbody>
                                          <?php $a = 1; ?>

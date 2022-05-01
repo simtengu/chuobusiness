@@ -31,9 +31,10 @@
 			</p>
 
 			<h4 style="font-family: Arial-Narrow;">Social Media</h4>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>	
+				<a style="margin-right: 4px" class="text-dark" href="https://wa.me/255710162838" target="blank"><i style="font-size:26px;color: #53ff53;" class="fab fa-whatsapp"></i></a>
+				<a style="margin-right: 4px" class="text-dark" href="#" target="blank"><i style="font-size:25px;color: #0069c3;" class="fab fa-facebook"></i></a>
+				<a style="margin-right: 4px" class="text-dark" href="#" target="blank"><i style="font-size:25px;color: #ea0000;" class="fab fa-youtube"></i></a>
+				<a class="text-dark" href="#" target="blank"><i style="font-size:25px;color: #cb2a7c;" class="fab fa-instagram"></i></a>
 	     </div>		
 		</div>
 			

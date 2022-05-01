@@ -1,5 +1,5 @@
 @extends('layouts.user_profile')
-
+  
 @section('content')
 <!-- new product section............................................. -->
       <div id="new_product" class="mb-2 py-3">
@@ -121,7 +121,7 @@
       $("#productConditionDiv").hide();
       $("#pTime").val("");
       $("#pForm").val("");
-   });
+   }); 
 
     $("#category_name").change(function(){
         var categoryId = $(this).val();
@@ -135,6 +135,7 @@
         $("#pForm").val("");
   
         }else{
+          $("#street_name").val(null);
           $("#street_name_div").hide();
           $("#PCondition").show();
           $("#brandDiv").show();

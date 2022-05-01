@@ -8,11 +8,12 @@
     <meta name="author" content="">
 <!-- Bootstrap style --> 
     <link id="callCss" rel="stylesheet" href="{{ asset('themes/bootshop/bootstrap.min.css') }}" media="screen"/> 
-    <link href="{{ asset('themes/css/styles.css') }}" rel="stylesheet" media="screen"/>
+    <link href="{{ asset('themes/css/base.css') }}" rel="stylesheet" media="screen"/>
     <link href="{{ asset('themes/css/flickity.css') }}" rel="stylesheet" media="screen"/>
 <!-- Bootstrap style responsive -->	
 	<link href="{{ asset('themes/css/bootstrap-responsive.min.css') }}" rel="stylesheet"/>
 	<link href="{{ asset('themes/css/font-awesome.css') }}" rel="stylesheet">
+	<link href="{{ asset('themes/css/all.css') }}" rel="stylesheet">
 <style type="text/css">
 
 .brown-color {
@@ -46,33 +47,6 @@
 	z-index: 100;
 	display: none;
 }
-
-/*#searchEnginesContainer{
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	min-width: 100vw;
-	height: 100vh;
-	background-color: rgba(0,0,0,0.8);
-	z-index: 120;
-	display: none;
-
-}
-
-#searchEnginesContainer .searchContainer {
-    padding: 4px 25px;
-    display: inline-block;
-    min-height: 80vh;
-    background-color: white;
-    border-radius: 4px;
-    margin-top: 5%;
-    overflow-y: scroll;
-    scrollbar-width: none;
-}
-
-::-webkit-scrollbar {
-	width: 0px;
-}*/
 
 
 
@@ -367,7 +341,7 @@
 	<script src="{{ asset('themes/js/jquery.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('themes/js/bootstrap.min.js') }}" type="text/javascript"></script>
 	<!-- <script src="{{ asset('themes/js/google-code-prettify/prettify.js') }}"></script> -->	
-	<script src="{{ asset('themes/js/base.js') }}"></script>
+	<script src="{{ asset('themes/js/bootshop.js') }}"></script>
 	<script src="{{ asset('themes/js/flickity.min.js') }}"></script>
    @yield('scripts')
 </body>

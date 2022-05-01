@@ -9,13 +9,16 @@
 			@endforeach
 		</ul>
 		<br/>
-	  @include('includes.sidebar')
+	  		 <div class="d-large">
+		  	 @include('includes.sidebar')
+		  </div>
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">	
 		  <div class="d-flex">
 		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/region_products') }}/{{ $university->region_id }}/latest">{{ $university->region->name }}</a><a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class=" text-arial">\</a>
 		  	<a style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="{{ url('/university_products') }}/{{ $university->id }}/latest">{{ $university->name }}</a>	
+		    <label style="padding: 8px 8px 8px 0px; font-size: 19px; font-weight: bold; " class="text-orange text-arial" href="#"><span style="color: black; margin-right:3px;">\</span>Category</label>
 		  </div>
 
 	<div class="region-categories-div">

@@ -196,6 +196,7 @@ class ProductsController extends Controller
         $product->brand_id = $data->get('brand_id');
         $product->period_value = $data->get('period_value');
         $product->period_id = $data->get('period_id');
+        $product->street_name = $data->get('street_name');
         $product->save();
         session()->flash("updated","Product successful updated");
         return redirect()->route('product.show',$product->slug);    
@@ -536,17 +537,19 @@ class ProductsController extends Controller
          return view('products.category_products',compact('order_type','products','category_slug','categories','universities','regions'));
       }
 
-//region products................................................................................
+  //region products................................................................................
       public function regionProducts(Request $data){
         $order_type = "latest";
         $region_id = $data->region_id;
-        $region_universities = Product::selectRaw('count(university_id) as uv_count,university_id')->whereHas('university', function($q) use ($region_id){
-           $q->where('region_id',$region_id);
-        })->groupBy('university_id')->orderBy('uv_count')->get();
+        $region_universities = University::where('region_id',$region_id)->get();
+        foreach($region_universities as $uv){
+           $uv->product_count =Product::where('university_id',$uv->id)->count();
+        }
+
         $region = Region::findOrFail($region_id);
         $universities = $this->topUniversities();
         $regions = $this->regions();
-
+ 
          $categories = Category::all();
           foreach ($categories as $category) {
                $category->total =  Product::where('category_id',$category->id)->whereHas('university',     function($q) use ($region_id) {
@@ -565,9 +568,10 @@ class ProductsController extends Controller
       public function region_products($region_id,$order_type){
         $universities = $this->topUniversities();
         $regions = $this->regions();
-        $region_universities = Product::selectRaw('count(university_id) as uv_count,university_id')->whereHas('university', function($q) use ($region_id){
-           $q->where('region_id',$region_id);
-        })->groupBy('university_id')->orderBy('uv_count')->get();
+        $region_universities = University::where('region_id',$region_id)->get();
+        foreach($region_universities as $uv){
+           $uv->product_count =Product::where('university_id',$uv->id)->count();
+        }
         $region = Region::findOrFail($region_id);
          $categories = Category::all();
           foreach ($categories as $category) {

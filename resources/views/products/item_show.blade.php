@@ -61,7 +61,9 @@
 						<span style="display: block;"> (For bargain/discount & buying)</span>
 						<label style="text-transform: capitalize;" class="text-16">Name: {{ $product->user->fname }} {{ $product->user->lname }}</label>
 						<label class="text-16">From: {{ $product->university->name }}, {{ $product->university->region->name }}</label>
-						<a class="text-dark text-17" href="https://wa.me/255{{ substr($product->user->whatsapp_phone,1) }}" target="blank">{{ $product->user->whatsapp_phone }} <i class="icon-phone"></i></a> 
+						<span style="margin-right: 4px;" class="text-dark text-17">{{ $product->user->whatsapp_phone }}</span>
+						<a class="text-dark" href="https://wa.me/+255{{ substr($product->user->whatsapp_phone,1) }}" target="blank"><i style="font-size:24px;color: #53ff53;" class="fab fa-whatsapp"></i></a> <a style="margin-left: 5px;" href="#"><i style="font-size:20px;color: #60d8da;" class="fas fa-phone"></i></a><br>
+						 
 	                        
 						<!-- <label>{{ $product->user->whatsapp_phone }}</label> -->
 						<label class="text-16">{{ $product->user->phone_2 ?? "" }}</label>

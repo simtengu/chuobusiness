@@ -6,18 +6,28 @@
 <div class="row">
 <!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
+		<div style="padding: 0px 4px"> 
      	@if(count($categories))
       	 <ul id="sideManu" class="nav nav-tabs nav-stacked">
 			@foreach($categories as $category)
 			<li><a href="{{ url('/category_products') }}/{{ $category->slug }}/latest" >{{ $category->name }} <span style="font-size: 16px;" class="badge">{{ $category->total }}</span></a></li>
 			@endforeach
 		</ul>
-		@endif
+		@endif	
+		</div>
+
 		<br/>
 		  <div style="text-align: center;" class="thumbnail">
              <h3 class="text-times text-18 text-blue">Advertise here</h3>
+             <div class="d-flex" style="justify-content: center;">
+            <a style="margin-right: 9px" class="text-dark" href="https://wa.me/255710162838" target="blank"><i style="font-size:25px;color: #53ff53;" class="fab fa-whatsapp"></i></a>
+            <a class="text-dark" href="https://wa.me/255710162838" target="blank"><i style="font-size:20px;color: #60d8da;" class="fas fa-phone"></i></a>	
+             </div>
 		  </div><br/>
-         @include('includes.sidebar')
+		  <div class="d-large">
+		  	 @include('includes.sidebar')
+		  </div>
+         
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">		

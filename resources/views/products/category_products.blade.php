@@ -15,7 +15,9 @@
 		  <div style="text-align: center;" class="thumbnail">
              <h3 class="text-times text-18 text-blue">Advertise here</h3>
 		  </div><br/>
- @include('includes.sidebar')
+ 		  <div class="d-large">
+		  	 @include('includes.sidebar')
+		  </div>
 	</div>
 <!-- Sidebar end=============================================== -->
 		<div class="span9">	
